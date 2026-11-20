@@ -43,6 +43,7 @@ Placeholders in the source: `{{LOGO}}`, `{{COIN:BTC}}` (any coin file name) and 
 | What the bot does | `#bot` | Animated trade chart (illustrative values) and four steps. |
 | Set up in four steps | `#setup` | Plan, Connect (keys can be skipped), Margin, Launch (Risk Disclosure must be accepted). |
 | Compare | `#compare` | Competitor facts with sources and the date they were checked. |
+| Subscribers | `#members` | Live subscriber count in a liquid pool; syncs from `GET /api/public/stats` → `{"subscribers": n}` every 15 s. |
 | Questions | `#faq` | |
 | Final band | `.final` | Hold-to-start button. |
 | Sign in | `#si` | Google or Apple only (no password). Opens after the Plan step and before launch. |

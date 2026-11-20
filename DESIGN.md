@@ -154,7 +154,15 @@ second bubble or particle system; extend the engine instead, so everything moves
   payment link".
 - Launching the bot requires sign-in (Google or Apple) and a paid plan.
 
-## 9. Accessibility
+## 9. Live numbers
+
+- The subscriber pool reads the real count from `GET /api/public/stats` (`{"subscribers": n}`),
+  every 15 s and when the tab gets focus. A rise pours more liquid, bursts coins and rolls the
+  number (odometer). The fill shows progress to the next milestone (100, 250, 500, 1,000 …).
+- Until the endpoint answers, it shows the empty state ("Be one of the first") at the resting level.
+- **Never hard-code or invent a count.**
+
+## 10. Accessibility
 
 - Visible focus ring (`:focus-visible`, gold outline) on everything interactive.
 - Every control has a label; icon-only buttons get `aria-label`.
