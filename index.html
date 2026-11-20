@@ -176,6 +176,8 @@ section.blk{padding-block:96px 24px;scroll-margin-top:-8px}   /* menu links land
 .pm input:checked{background:var(--up);box-shadow:none}
 .pm input:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:translate(0,-1px) rotate(45deg)}
 .pm b{font-size:14.5px;display:block}.pm small{font-size:12.5px;color:var(--fg3)}
+.bset{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin:6px 2px 0}.bset b{font-size:15px}.bset span{font-size:12.5px;color:var(--fg3)}
+.pm.info{cursor:default}.pm.info .i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex:none;font:700 12px var(--f-mono);color:var(--blue);box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--blue) 60%,transparent)}
 .pm.must b::after{content:" · required";color:var(--gold-ink);font-weight:600;font-size:12px}
 .ipbox{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 16px;border-radius:16px;background:color-mix(in srgb,var(--blue) 10%,var(--bg2));font-size:14px;color:var(--fg2)}
 .ipbox b{font-family:var(--f-mono);color:var(--fg);user-select:all}
@@ -561,6 +563,13 @@ footer p{max-width:70em;margin:0}
             <label class="pm must"><input type="checkbox" id="p3"><span><b>Withdrawals off</b><small>Keep this unticked on Binance</small></span></label>
             <label class="pm"><input type="checkbox" id="p4"><span><b>Restrict to our IP</b><small>Recommended by Binance</small></span></label>
           </div>
+          <div class="bset"><b>Binance Futures settings</b><span>Futures → Preferences on Binance</span></div>
+          <div class="perm">
+            <label class="pm must"><input type="checkbox" id="p5"><span><b>Position mode: One-way</b><small>Hedge mode makes every bot order fail</small></span></label>
+            <label class="pm must"><input type="checkbox" id="p6"><span><b>USDT in the USDⓈ-M Futures wallet</b><small>The bot trades from your USDT balance</small></span></label>
+            <label class="pm"><input type="checkbox" id="p7"><span><b>Asset mode: Single-Asset</b><small>Recommended; Multi-Assets forces cross margin</small></span></label>
+            <div class="pm info"><span class="i">i</span><span><b>Margin type and leverage</b><small>Nothing to do: the bot sets them for each pair</small></span></div>
+          </div>
           <div class="ipbox"><span>Add this IP to your key on Binance: <b id="ip">203.0.113.24</b></span><button type="button" class="chip" id="copyip">Copy IP</button></div>
           <div class="conn" id="conn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Keys connected · trade only, no withdrawals</span></div>
           <div class="nav2"><button type="button" class="btn ghost" data-back>Back</button><span style="display:flex;gap:10px;flex-wrap:wrap"><button type="button" class="btn ghost" id="skipk">Skip for now</button><button type="submit" class="btn gold lp" id="verify" data-hover><span class="lbl">Connect keys</span></button></span></div>
@@ -646,6 +655,7 @@ footer p{max-width:70em;margin:0}
     <details open><summary>Can ThinkerBTC withdraw my money?</summary><p>No. Your key only allows reading and futures trading. Withdrawals stay off on Binance, so funds can't leave your account.</p></details>
     <details><summary>Can I stop the bot?</summary><p>Yes. Pause it from the app and it stops opening trades. Open positions keep their stop loss and take profit, or you can close them yourself.</p></details>
     <details><summary>What happens when my plan ends?</summary><p>The bot stops opening new trades. Positions that are already open keep their exchange orders until they close.</p></details>
+    <details><summary>Which Binance settings do I need?</summary><p>On the API key: reading and futures on, withdrawals off, ideally restricted to our IP. In Futures preferences: position mode One-way (Hedge mode makes the bot's orders fail) and, recommended, Single-Asset mode. Keep USDT in your USDⓈ-M Futures wallet. Margin type and leverage need no setup; the bot sets them for each pair.</p></details>
     <details><summary>How do I pay?</summary><p>In USDC on the Solana network. Scan the QR code with Phantom, Solflare or any Solana Pay wallet. Every QR carries a unique reference for your order, so your payment is recognised and your plan starts automatically, usually within seconds. Network fees on Solana are a fraction of a cent.</p></details>
     <details><summary>Why only Google or Apple sign-in?</summary><p>So there is no ThinkerBTC password that could leak or be guessed. Your account gets the protection you already have on Google or Apple, including two-step verification. Signing in never gives access to your Binance funds.</p></details>
     <details><summary>Do I need to keep my computer on?</summary><p>No. ThinkerBTC runs on its own servers and trades through your Binance API key around the clock. Open the dashboard whenever you want to check on it.</p></details>
@@ -832,7 +842,7 @@ const now=()=>performance.now();
 [['heroField',.5,2],['finField',.9,2.2]].forEach(([id,op,dens])=>{const s=liquid(document.getElementById(id),{color:'gold'});s.ghost=true;s.glass='white';s.restCoins=true;s.dens=dens;s.p=s.target=s.rest=100;s.c.style.opacity=op});
 
 /* hover buttons fill with gold liquid */
-document.querySelectorAll('[data-hover]').forEach(el=>{const s=liquid(el,{color:'deep',foam:true,speed:450});
+document.querySelectorAll('[data-hover]').forEach(el=>{const s=liquid(el,{color:'deep',foam:true,speed:1400,rest:16});s.restCoins=true;s.cs=.6;   /* same resting foam, fizz and coin bubbles as every other button */
   el.addEventListener('pointerenter',()=>{s.target=100;s.coinsUntil=now()+1800;kick()});el.addEventListener('pointerleave',()=>{s.target=0;kick()});
   el.addEventListener('focus',()=>{s.target=100;kick()});el.addEventListener('blur',()=>{s.target=0;kick()})});
 
@@ -919,7 +929,7 @@ const ST={plan:'m3',pay:'USDC (Solana)',paid:null,step:0,max:0,keys:false,margin
 const planEl=document.getElementById('plans');
 planEl.innerHTML=PLANS.map(p=>{const per=p.price/p.months,save=Math.round((1-per/49)*100);
   return`<button class="plan lp${p.id==='m12'?' best':''}" data-plan="${p.id}" aria-pressed="false"><span class="tag lbl ${p.tag?'':'none'}">${p.tag||'·'}</span><span class="term lbl">${p.term}</span><span class="price lbl">$${per%1?per.toFixed(2):per}<small>/mo</small></span><span class="per lbl">${p.months>1?'$'+p.price+' every '+p.months+' months':'Billed monthly'}</span><span class="save lbl">${save>0?'Save '+save+'%':'Cancel anytime'}</span></button>`}).join('');
-const PL={};planEl.querySelectorAll('.plan').forEach(el=>{PL[el.dataset.plan]=liquid(el,{color:'gold',foam:true,speed:520});PL[el.dataset.plan].cs=.55;   /* smaller coin bubbles inside the plan cards */el.addEventListener('click',()=>pickPlan(el.dataset.plan,true))});
+const PL={};planEl.querySelectorAll('.plan').forEach(el=>{PL[el.dataset.plan]=liquid(el,{color:'gold',foam:true,speed:900});PL[el.dataset.plan].cs=.55;   /* smaller coin bubbles inside the plan cards */el.addEventListener('click',()=>pickPlan(el.dataset.plan,true))});
 function pickPlan(id,fx){ST.plan=id;for(const k in PL){const on=k===id,s=PL[k];if(on&&s.ghost){s.p=0}s.ghost=!on;s.coinsOnly=on;s.b=[];s.target=100;if(!on)s.p=100;s.el.setAttribute('aria-pressed',on)}if(fx)burst(PL[id],now());kick();
   const p=PLANS.find(x=>x.id===id);document.getElementById('planHint').textContent=p.term+' · $'+p.price+' · '+ST.pay;document.getElementById('s1').textContent=p.term}
 pickPlan('m3',false);
@@ -948,8 +958,9 @@ document.getElementById('keys').addEventListener('submit',e=>{e.preventDefault()
   ak.parentElement.classList.toggle('bad',!okK);sk.parentElement.classList.toggle('bad',!okS);
   if(!okK||!okS){kerr.textContent='Binance keys are 64 letters and digits. Copy them again from API Management on Binance.';return}
   if(!document.getElementById('p2').checked||!document.getElementById('p3').checked){kerr.textContent='Turn on futures and keep withdrawals off on Binance, then tick both boxes.';return}
+  if(!document.getElementById('p5').checked||!document.getElementById('p6').checked){kerr.textContent='Set position mode to One-way and keep USDT in your USDⓈ-M Futures wallet, then tick both boxes.';return}
   const btn=document.getElementById('verify');btn.querySelector('.lbl').textContent='Checking keys…';KS.target=100;KS.speed=1400;kick();
-  setTimeout(()=>{ST.keys=true;document.getElementById('s2').textContent='Binance Futures';ak.parentElement.classList.add('ok');sk.parentElement.classList.add('ok');document.getElementById('conn').classList.add('on');
+  setTimeout(()=>{ST.keys=true;kerr.textContent='';document.getElementById('s2').textContent='Binance Futures';ak.parentElement.classList.add('ok');sk.parentElement.classList.add('ok');document.getElementById('conn').classList.add('on');
     btn.querySelector('.lbl').textContent='Continue';KS.target=0;KS.speed=450;burst(KS,now());kick()},1500)});
 
 function skipKeys(){kerr.textContent='';ak.parentElement.classList.remove('bad');sk.parentElement.classList.remove('bad');document.getElementById('s2').textContent='Keys not added yet';go(2)}
