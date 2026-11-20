@@ -154,6 +154,16 @@ second bubble or particle system; extend the engine instead, so everything moves
   payment link".
 - Launching the bot requires sign-in (Google or Apple) and a paid plan.
 
+### Binance account requirements (shown in the Connect step)
+
+- API key: reading and futures on, withdrawals off, ideally restricted to the service IP.
+- **Position mode: One-way (required).** The bot sends orders without a position side; in Hedge
+  mode Binance rejects them.
+- **USDT in the USDⓈ-M Futures wallet (required).** The bot trades from the USDT balance.
+- Asset mode: Single-Asset (recommended). Multi-Assets mode only allows cross margin.
+- Margin type and leverage: no user action; the bot sets them per pair.
+- Keep the Connect step, the FAQ and this list in sync with the bot's real requirements.
+
 ## 9. Live numbers
 
 - The subscriber pool reads the real count from `GET /api/public/stats` (`{"subscribers": n}`),
