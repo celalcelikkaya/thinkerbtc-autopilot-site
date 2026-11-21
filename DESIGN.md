@@ -85,7 +85,11 @@ Scale:
 
 - Wrap: `--wrap` 1200px content, gutter `--gutter` `clamp(16px, 4vw, 40px)` plus safe areas.
 - **12-column grid** inside sections. Section header `.sh`: label in columns 1–3, heading and lede in
-  4–12. Setup: step rail 1–3, panel 4–12. Below 1024px everything stacks to one column.
+  4–12. Below 1024px everything stacks to one column.
+- **Setup is a checkout** (`#setup`): the label, heading and lede on the left with the four steps as a glass
+  capsule (`.steps`) on the right; below, the current step in one card (`.panel`) and beside it the receipt
+  (`.rcpt`, about 380px, sticky). Below 1024px the steps sit under the heading and the receipt follows the card;
+  under 480px the steps show labels only, and finished ones turn green.
 - Sections: `--section` 120px top padding (84px on phones). Menu bar: `--bar-h` 56px. Ticker: `--tick-h` 40px.
 - **Coin ticker** (`body > .tape`): pinned to the top of the screen on every page width, always in view while
   scrolling; a Liquid Glass strip (see Material) that content scrolls under, with a soft lower edge instead of a rule.
@@ -141,17 +145,22 @@ dashboard's numbers) stays solid so it reads first. Never put glass on glass.
   `.hero-art` (`hero-trade-line.svg`, Autopilot taking the trade line), top right beside the headline's short
   second line, behind the text, its line fading toward the buttons through a mask; at 680px and below it moves
   into the flow above the label, cropped to Autopilot and the start of its line. It stays an accent (at most
-  400px wide) so the trade chart still leads the first screen. Also beside the Connect, Margin and Launch step headings (`.pane-h`), above "ThinkerBTC
+  400px wide) so the trade chart still leads the first screen. Also beside the Connect and Margin step headings (`.pane-h`), at the top of the receipt
+  (`review-and-hold.svg`, desktop only), above "ThinkerBTC
   is trading for you", on the right of the closing band, and in the dashboard's "No open positions" and "No closed
   trades" states. Do not add them to lists, cards or every section; a new one needs a moment it actually depicts.
   The pack's orange accents were recoloured to the site green (same hue as `--up`); new artwork must use green
   `#16C784` (light `#6FE3B0`-ish highlights, dark `#0F9461`-ish shadows) in place of orange.
 - **Chips** `.chip`: 38px, radius 8px, 1px inset rule; the selected chip is inverted (`--fg` ground).
-- **Plan cards** `.plan`: `--card2` with a 1px rule; selected fills with green liquid; "Best value"
-  has a green outline.
+- **Plan list** `.plan`: one row per plan (radio, term with its tag, billing line, price per month, saving) on
+  `--bg2`. The chosen row gets a 1.5px green outline, a faint green tint and a filled radio; no liquid fill.
+  Under 600px the saving hides.
+- **Receipt** `.rcpt` (Liquid Glass): Plan, Exchange (grey until keys are connected or skipped), Margin per
+  trade, Open at once, then Due today (turns to green "Paid" once the payment is confirmed) and Pay with. The
+  hold-to-start button lives here: locked until the last step and the Risk Disclosure are done, its small line
+  says why; after the hold it gives way to "Autopilot is live".
 - **Inputs** `.inp`: 52px on `--bg2`, `--line2` rule, green focus ring, green when valid, red when not.
 - **Tick boxes** `.pm`: 20px square that turns green when ticked.
-- **Summary tiles** `.sum`: a single ruled grid, tiles separated by 1px lines.
 - **Compare table**: ThinkerBTC column tinted green with a 2px green top rule.
 - **FAQ**: two ruled columns of `details`, green `+` that turns to `×`.
 - **Section menu** `.menu-b` + `.menu` (below 1280px): the 44px button in the pill opens a panel upward,

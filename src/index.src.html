@@ -206,19 +206,37 @@ section.blk{padding-block:var(--section) 0;scroll-margin-top:calc(var(--tick-h) 
   .phones::-webkit-scrollbar{display:none}
   .phones li{flex:0 0 min(64vw,270px);scroll-snap-align:center}}
 
-/* ---------- setup wizard ---------- */
-.setup{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:16px;align-items:start}
-.steps{grid-column:1/span 3;display:flex;flex-direction:column;position:sticky;top:calc(var(--tick-h) + 24px);border-top:1px solid var(--line)}
-.panel{grid-column:4/-1;background:var(--card);border:1px solid var(--line);border-radius:var(--r-panel);padding:clamp(20px,3vw,36px);min-width:0}
-@media (max-width:1023px){.steps,.panel{grid-column:1/-1}.steps{position:static;flex-direction:row;overflow-x:auto;border-top:0;gap:8px;padding-bottom:4px;scrollbar-width:none}}
-.st{display:flex;align-items:center;gap:12px;padding:14px 4px;border:0;border-bottom:1px solid var(--line);background:transparent;text-align:left;cursor:pointer;color:var(--fg3);white-space:nowrap}
-.st .n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font:700 12.5px/1 var(--f-mono);box-shadow:inset 0 0 0 1px var(--line2);color:var(--fg2);flex:none;transition:background .3s,color .3s,box-shadow .3s}
-.st b{display:block;font-size:15px;color:var(--fg2);font-weight:600}.st small{display:block;font-size:12.5px;color:var(--fg3)}
-.st.on b{color:var(--fg)}.st.on .n{background:var(--acc);color:var(--ink);box-shadow:none}
-.st.done .n{background:color-mix(in srgb,var(--up) 16%,transparent);color:var(--up-ink);box-shadow:none}
+/* ---------- setup: a checkout. The step in one card, a glass receipt beside it that fills in and holds the start button ---------- */
+.setup-top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:24px 40px;margin-bottom:32px}
+.setup-t h2{font-size:clamp(34px,4.1vw,56px);line-height:1.08;margin-top:14px;max-width:24ch;text-wrap:balance}
+.setup-t .lede{color:var(--fg2);margin-top:14px;max-width:62ch}
+.steps{display:flex;gap:4px;padding:5px;border-radius:var(--r-pill);max-width:100%;overflow-x:auto;scrollbar-width:none}
+.steps::-webkit-scrollbar{display:none}
+.st{display:flex;align-items:center;gap:9px;height:44px;padding:0 16px 0 8px;border:0;border-radius:var(--r-pill);background:transparent;cursor:pointer;color:var(--fg3);white-space:nowrap;flex:none}
+.st .n{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font:700 12px/1 var(--f-mono);box-shadow:inset 0 0 0 1.5px var(--line2);color:var(--fg2);flex:none;transition:background .3s,color .3s,box-shadow .3s}
+.st b{display:block;font-size:14.5px;color:var(--fg2);font-weight:600}.st small{display:none}
+.st.on{background:rgba(255,255,255,.10)}.st.on b{color:var(--fg)}.st.on .n{background:var(--fg);color:var(--bg);box-shadow:none}
+.st.done .n{background:var(--up);color:var(--ink);box-shadow:none}
 .st:disabled{cursor:default;opacity:.55}
-@media (max-width:1023px){.st{border:1px solid var(--line);border-radius:var(--r-ctl);padding:10px 14px}.st.on{border-color:var(--line2);background:var(--card)}}
-.panel h3{font-size:24px;letter-spacing:.01em}
+@media (hover:hover) and (pointer:fine){.st:not(.on):hover b{color:var(--fg)}}
+.setup{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,380px);gap:28px;align-items:start}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r-band);padding:clamp(20px,3vw,36px);min-width:0}
+.rcpt{position:sticky;top:calc(var(--tick-h) + 20px);border-radius:var(--r-band);padding:24px 24px 22px;min-width:0}
+.rcpt .art{width:210px;margin:-16px auto -8px}
+.rcpt h3{font-size:24px;letter-spacing:.01em;margin-bottom:10px}
+.rk{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px solid rgba(255,255,255,.08);font-size:14.5px}
+.rk span{color:var(--fg2)}.rk b{font-weight:600;text-align:right}.rk b.mono{font-family:var(--f-mono)}.rk b.no{color:var(--fg3);font-weight:500}
+.rk.due{border-top-color:rgba(255,255,255,.16);padding-top:16px}.rk.due span{color:var(--fg);font-weight:600}.rk.due b{font:700 26px/1 var(--f-mono);letter-spacing:-.02em}
+.rk.due.paid b,.rk.due.paid span{color:var(--up-ink)}
+.rk.pw{border-top:0;padding-top:2px}.rk.pw b{display:flex;align-items:center;gap:8px}.rk.pw svg{width:20px;height:20px;flex:none}
+.rcpt .go{margin-top:14px;height:68px;border-radius:var(--r-pill);font-size:19px}
+.rlive{display:none;align-items:center;justify-content:center;gap:9px;margin:14px 0 0;font-weight:650;color:var(--up-ink)}
+.rlive i{width:9px;height:9px;border-radius:50%;background:currentColor;box-shadow:0 0 0 4px color-mix(in srgb,currentColor 22%,transparent)}
+.rcpt.is-live .go{display:none}.rcpt.is-live .rlive{display:flex}
+[tabindex="-1"]:focus{outline:none}   /* headings receive focus when the step changes; that is for screen readers, not a ring */
+@media (max-width:1023px){.setup-top{grid-template-columns:1fr}.setup{grid-template-columns:1fr}.rcpt{position:static}.rcpt .art{display:none}}
+@media (max-width:480px){.steps{width:100%}.st{flex:1 1 0;justify-content:center;padding:0 6px}.st .n{display:none}.st b{font-size:13.5px}.st.done b{color:var(--up-ink)}}   /* phones: labels only; done steps turn green */
+.panel h3{font-size:28px;letter-spacing:.01em}
 .panel .sub{color:var(--fg2);margin:8px 0 24px;max-width:60ch}
 /* illustrations (assets/illustrations): decorative, one per moment, never in the hero */
 .art{display:block;height:auto;max-width:100%;pointer-events:none;user-select:none;-webkit-user-drag:none}
@@ -232,23 +250,20 @@ section.blk{padding-block:var(--section) 0;scroll-margin-top:calc(var(--tick-h) 
 @media (max-width:560px){.nav2{flex-direction:column-reverse;align-items:stretch}.nav2>span{flex-direction:column-reverse}.nav2 .btn{width:100%}.nav2>.hint{text-align:center}}
 .hint{font-size:13px;color:var(--fg3)}
 
-/* plans */
-.plans{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-@media (max-width:1100px){.plans{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:460px){.plans{grid-template-columns:1fr}}
-.plan{border-radius:var(--r-card);background:var(--card2);padding:18px 18px 16px;text-align:left;display:flex;flex-direction:column;gap:5px;min-height:186px;color:var(--fg);box-shadow:inset 0 0 0 1px var(--line)}
-@media (hover:hover) and (pointer:fine){.plan:not(.full):not(.best):hover{box-shadow:inset 0 0 0 1px var(--line2)}}
-.plan .tag{align-self:flex-start;font:600 11px/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:5px 8px;border-radius:6px;background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--acc-ink);min-height:21px}
-.plan .tag.none{visibility:hidden}
-.plan.best{box-shadow:inset 0 0 0 1.5px var(--acc)}
-.plan:not(.full)>canvas.lq{opacity:.28}
-.plan .term{font:650 15px/1.2 var(--f-body);margin-top:8px}
-.plan .price{font:700 32px/1 var(--f-mono);letter-spacing:-.04em;margin-top:6px}
-.plan .price small{font:500 14px var(--f-body);color:var(--fg2);letter-spacing:0}
-.plan .per{font-size:13px;color:var(--fg2)}
-.plan .save{margin-top:auto;font:700 12.5px/1 var(--f-mono);color:var(--up-ink)}
-.plan.full .tag{background:rgba(3,20,11,.14);color:var(--ink)}
-.plan.full .term,.plan.full .price,.plan.full .price small,.plan.full .per,.plan.full .save{color:var(--ink)}
+/* plans: a list; the chosen one gets a green outline and a filled radio */
+.plans{display:grid;gap:10px}
+.plan{display:grid;grid-template-columns:22px minmax(0,1fr) auto minmax(84px,auto);align-items:center;gap:18px;width:100%;padding:16px 22px;border:0;border-radius:var(--r-card);background:var(--bg2);color:var(--fg);text-align:left;cursor:pointer;box-shadow:inset 0 0 0 1px var(--line);font:inherit}
+.plan .radio{width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--line2);transition:box-shadow .25s var(--ease-out)}
+.plan .term{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;font:600 17px/1.25 var(--f-body)}
+.plan .per{display:block;font-size:13.5px;color:var(--fg3);margin-top:3px}
+.plan .price{font:700 26px/1 var(--f-mono);letter-spacing:-.03em;white-space:nowrap}
+.plan .price small{font:500 13px var(--f-body);color:var(--fg3);letter-spacing:0}
+.plan .save{font:700 12.5px/1 var(--f-mono);color:var(--up-ink);text-align:right;white-space:nowrap}
+.plan .tag{font:600 11px/1 var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;border-radius:var(--r-pill);background:color-mix(in srgb,var(--acc) 15%,transparent);color:var(--acc-ink);white-space:nowrap}
+.plan[aria-pressed="true"]{background:linear-gradient(color-mix(in srgb,var(--up) 7%,transparent),color-mix(in srgb,var(--up) 7%,transparent)),var(--bg2);box-shadow:inset 0 0 0 1.5px var(--up)}
+.plan[aria-pressed="true"] .radio{box-shadow:inset 0 0 0 7px var(--up)}
+@media (hover:hover) and (pointer:fine){.plan[aria-pressed="false"]:hover{box-shadow:inset 0 0 0 1px var(--fg3)}}
+@media (max-width:600px){.plan{grid-template-columns:20px minmax(0,1fr) auto;gap:12px;padding:14px 16px}.plan .save{display:none}.plan .price{font-size:21px}.plan .radio{width:20px;height:20px}.plan[aria-pressed="true"] .radio{box-shadow:inset 0 0 0 6px var(--up)}}
 .incl{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:22px;color:var(--fg2);font-size:14px}
 .incl span{display:flex;align-items:center;gap:7px}.incl svg{width:16px;height:16px;color:var(--up-ink)}
 .pay{display:flex;gap:8px 10px;flex-wrap:wrap;margin-top:18px;align-items:center}
@@ -313,10 +328,6 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border:0;border-radiu
 .tank.full .lbl{color:var(--ink)}.tank.full[data-c=down] .lbl{color:#fff}
 
 /* launch */
-.sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin-bottom:24px;background:var(--line);border:1px solid var(--line);border-radius:var(--r-card);overflow:hidden}
-@media (max-width:760px){.sum{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.sum .sm{background:var(--bg2);padding:16px}
-.sum .sm span{font-size:12.5px;color:var(--fg3);display:block}.sum .sm b{font:650 16.5px/1.3 var(--f-body);display:block;margin-top:6px}
 .go{width:100%;height:80px;border-radius:var(--r-panel);background:var(--card2);box-shadow:inset 0 0 0 1px var(--line2);color:var(--fg);display:flex;align-items:center;justify-content:center;gap:14px;font:400 21px/1 var(--f-display);font-synthesis:none;letter-spacing:.02em}
 .go small{font:500 13px var(--f-body);font-stretch:100%;color:var(--fg2);letter-spacing:0}
 .go .lbl{display:flex;flex-direction:column;align-items:center;gap:7px}
@@ -668,14 +679,16 @@ body.inapp>header.bar,body.inapp>main,body.inapp>footer,body.inapp>.mcta,body.in
 </div></section>
 
 <section class="blk" id="setup"><div class="wrap">
-  <header class="sh"><p class="label">Set up in four steps</p><div class="sh-c"><h2>From sign-up to a live bot in about three minutes.</h2><p>Pick a plan, sign in with Google or Apple, connect Binance with trade-only keys, choose your margin per trade, then hold the button. That's all ThinkerBTC needs.</p></div></header>
-  <div class="setup">
-    <div class="steps" role="tablist" aria-label="Setup steps">
+  <div class="setup-top">
+    <div class="setup-t"><p class="label">Set up in four steps</p><h2>From sign-up to a live bot in about three minutes.</h2><p class="lede">Pick a plan, sign in with Google or Apple, connect Binance with trade-only keys, choose your margin per trade, then hold the button. That's all ThinkerBTC needs.</p></div>
+    <div class="steps glass" role="tablist" aria-label="Setup steps">
       <button class="st on" data-go="0" role="tab" aria-selected="true"><span class="n">1</span><span><b>Plan</b><small>How long you subscribe</small></span></button>
       <button class="st" data-go="1" role="tab" aria-selected="false"><span class="n">2</span><span><b>Connect</b><small>Binance API keys</small></span></button>
       <button class="st" data-go="2" role="tab" aria-selected="false"><span class="n">3</span><span><b>Margin</b><small>Per trade and at once</small></span></button>
       <button class="st" data-go="3" role="tab" aria-selected="false"><span class="n">4</span><span><b>Launch</b><small>Hand over the wheel</small></span></button>
     </div>
+  </div>
+  <div class="setup">
 
     <div class="panel">
       <!-- 1 plan -->
@@ -743,15 +756,8 @@ body.inapp>header.bar,body.inapp>main,body.inapp>footer,body.inapp>.mcta,body.in
       <!-- 4 launch -->
       <div class="pane" data-pane="3">
         <div id="pre">
-          <div class="pane-h"><div><h3>Ready to hand over the wheel</h3><p class="sub">Check your setup, then hold the button. You can pause or stop the bot from the app whenever you like.</p></div><img class="art" src="{{IMG:illustrations/review-and-hold.svg}}" alt="" aria-hidden="true" width="560" height="400" decoding="async"></div>
-          <div class="sum">
-            <div class="sm"><span>Plan</span><b id="s1">3 months</b></div>
-            <div class="sm"><span>Exchange</span><b id="s2">Binance Futures</b></div>
-            <div class="sm"><span>Margin per trade</span><b class="mono" id="s3">$100</b></div>
-            <div class="sm"><span>Open at once</span><b class="mono" id="s4">5 trades</b></div>
-          </div>
+          <h3>Ready to hand over the wheel</h3><p class="sub">Check your setup in Your autopilot, accept the Risk Disclosure, then hold the start button. You can pause or stop the bot from the app whenever you like.</p>
           <label class="pm acc" id="accl"><input type="checkbox" id="acc"><span><b>I have read and accept the Risk Disclosure</b><small>Leveraged futures can lose money fast, including your whole margin. <a href="#" class="rdl">Read the full Risk Disclosure</a></small></span></label>
-          <button class="go lp" id="go" data-color="up"><span class="lbl">Hold to start autopilot<small id="goh">Keep pressing for a second</small></span></button>
           <div class="nav2"><button class="btn ghost" data-back>Back</button><span class="hint">Trading starts on the next signal the bot finds.</span></div>
         </div>
         <div class="live" id="live">
@@ -763,6 +769,18 @@ body.inapp>header.bar,body.inapp>main,body.inapp>footer,body.inapp>.mcta,body.in
         </div>
       </div>
     </div>
+    <aside class="rcpt glass" id="rcpt" aria-label="Your autopilot">
+      <img class="art" src="{{IMG:illustrations/review-and-hold.svg}}" alt="" aria-hidden="true" width="560" height="400" decoding="async">
+      <h3>Your autopilot</h3>
+      <div class="rk"><span>Plan</span><b id="s1">3 months</b></div>
+      <div class="rk"><span>Exchange</span><b id="s2" class="no">Not connected yet</b></div>
+      <div class="rk"><span>Margin per trade</span><b class="mono" id="s3">$100</b></div>
+      <div class="rk"><span>Open at once</span><b class="mono" id="s4">5 trades</b></div>
+      <div class="rk due"><span id="dueL">Due today</span><b class="mono" id="due">$129</b></div>
+      <div class="rk pw"><span>Pay with</span><b><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="#2775CA"/><path fill="#fff" d="M20.1 18.3c0-2.2-1.3-2.9-3.9-3.2-1.9-.3-2.2-.7-2.2-1.6s.6-1.4 1.9-1.4c1.1 0 1.7.4 2 1.3.1.2.2.3.4.3h1c.3 0 .4-.2.4-.4-.3-1.4-1.3-2.4-2.8-2.6V9.2c0-.2-.2-.4-.5-.4h-.9c-.2 0-.4.2-.4.4v1.5c-1.8.2-3 1.4-3 2.9 0 2.1 1.3 2.8 3.9 3.2 1.7.3 2.3.7 2.3 1.6 0 1-.9 1.6-2.1 1.6-1.6 0-2.2-.7-2.3-1.5-.1-.2-.2-.3-.4-.3h-1c-.3 0-.4.2-.4.4.3 1.5 1.2 2.5 3.1 2.8v1.5c0 .2.2.4.5.4h.9c.2 0 .4-.2.4-.4v-1.5c1.8-.3 3-1.5 3-3.1z"/><path fill="#fff" d="M12.8 24.6c-4.7-1.7-7.1-6.9-5.4-11.6.9-2.5 2.9-4.5 5.4-5.4.2-.1.4-.3.4-.6v-.8c0-.2-.1-.4-.4-.4h-.1c-5.6 1.8-8.8 7.8-7 13.4 1.1 3.3 3.7 5.9 7 7h.1c.2 0 .4-.1.4-.4v-.8c0-.2-.2-.3-.4-.4zm6.4-17.3h-.1c-.2 0-.4.1-.4.4v.8c0 .2.2.5.4.6 4.7 1.7 7.1 6.9 5.4 11.6-.9 2.5-2.9 4.5-5.4 5.4-.2.1-.4.3-.4.6v.8c0 .2.1.4.4.4h.1c5.6-1.8 8.8-7.8 7-13.4-1.1-3.3-3.8-5.9-7-7.2z"/></svg>USDC on Solana</b></div>
+      <button class="go lp" id="go" data-color="up"><span class="lbl">Hold to start autopilot<small id="goh">Unlocks at the last step</small></span></button>
+      <p class="rlive" role="status"><i></i>Autopilot is live</p>
+    </aside>
   </div>
 </div></section>
 
@@ -976,7 +994,7 @@ document.addEventListener('visibilitychange',kick);
 function holdable(el,s,onFire){let t0=0,id=0;
   const step=()=>{const k=Math.min(1,(performance.now()-t0)/1200);s.hold=Math.max(.01,k*100);if(now()<s.coinsUntil);s.coinsUntil=Math.max(s.coinsUntil,performance.now()+3000);
     if(k>=1){s.hold=0;s.target=100;burst(s,performance.now());el.classList.add('pop');onFire&&onFire();return}id=requestAnimationFrame(step)};
-  const gate=e=>{if(el.id==='go'&&!ST.user){e.preventDefault();SIGN.open(()=>PAY.open());return true}if(el.id==='go'&&!ST.paid){e.preventDefault();PAY.open();return true}if(el.dataset.lock){e.preventDefault();el.dispatchEvent(new CustomEvent('locked'));return true}return false};   /* pointer and keyboard pass the same checks */
+  const gate=e=>{if(el.id==='go'&&ST.max<3){e.preventDefault();el.dispatchEvent(new CustomEvent('early'));return true}if(el.id==='go'&&!ST.user){e.preventDefault();SIGN.open(()=>PAY.open());return true}if(el.id==='go'&&!ST.paid){e.preventDefault();PAY.open();return true}if(el.dataset.lock){e.preventDefault();el.dispatchEvent(new CustomEvent('locked'));return true}return false};   /* pointer and keyboard pass the same checks */
   const start=e=>{if(el.dataset.done||e.button>0)return;if(gate(e))return;e.preventDefault();t0=performance.now();cancelAnimationFrame(id);id=requestAnimationFrame(step);kick()};
   const stop=()=>{cancelAnimationFrame(id);if(s.hold){s.hold=0}};
   el.addEventListener('pointerdown',start);['pointerup','pointerleave','pointercancel'].forEach(n=>el.addEventListener(n,stop));
@@ -1078,17 +1096,22 @@ const PLANS=[{id:'m1',term:'1 month',price:49,months:1,tag:''},{id:'m3',term:'3 
 const ST={plan:'m3',pay:'USDC (Solana)',paid:null,step:0,max:0,keys:false,margin:100,trades:5};
 const planEl=document.getElementById('plans');
 planEl.innerHTML=PLANS.map(p=>{const per=p.price/p.months,save=Math.round((1-per/49)*100);
-  return`<button class="plan lp${p.id==='m12'?' best':''}" data-plan="${p.id}" aria-pressed="false"><span class="tag lbl ${p.tag?'':'none'}">${p.tag||'·'}</span><span class="term lbl">${p.term}</span><span class="price lbl">$${per%1?per.toFixed(2):per}<small>/mo</small></span><span class="per lbl">${p.months>1?'$'+p.price+' every '+p.months+' months':'Billed monthly'}</span><span class="save lbl">${save>0?'Save '+save+'%':'Cancel anytime'}</span></button>`}).join('');
-const PL={};planEl.querySelectorAll('.plan').forEach(el=>{PL[el.dataset.plan]=liquid(el,{color:'gold',foam:true,speed:520});PL[el.dataset.plan].cs=.55;   /* smaller coin bubbles inside the plan cards */el.addEventListener('click',()=>pickPlan(el.dataset.plan,true))});
-function pickPlan(id,fx){ST.plan=id;for(const k in PL){const on=k===id,s=PL[k];if(on&&s.ghost){s.p=0}s.ghost=!on;s.coinsOnly=on;s.b=[];s.target=100;if(!on)s.p=100;s.el.setAttribute('aria-pressed',on)}if(fx)burst(PL[id],now());kick();
-  const p=PLANS.find(x=>x.id===id);document.getElementById('planHint').textContent=p.term+' · $'+p.price+' · '+ST.pay;document.getElementById('s1').textContent=p.term}
+  return`<button class="plan" type="button" data-plan="${p.id}" aria-pressed="false"><span class="radio" aria-hidden="true"></span><span><span class="term">${p.term}${p.tag?`<span class="tag">${p.tag}</span>`:''}</span><span class="per">${p.months>1?'$'+p.price+' every '+p.months+' months':'Billed monthly'}</span></span><span class="price">$${per%1?per.toFixed(2):per}<small>/mo</small></span><span class="save">${save>0?'Save '+save+'%':'Cancel anytime'}</span></button>`}).join('');
+planEl.querySelectorAll('.plan').forEach(el=>el.addEventListener('click',()=>pickPlan(el.dataset.plan)));
+function pickPlan(id){ST.plan=id;planEl.querySelectorAll('.plan').forEach(el=>el.setAttribute('aria-pressed',el.dataset.plan===id));
+  const p=PLANS.find(x=>x.id===id);document.getElementById('planHint').textContent=p.term+' · $'+p.price+' · '+ST.pay;document.getElementById('s1').textContent=p.term;rcpt()}
+/* the receipt: what is due or paid, and whether the start button may be held */
+function rcpt(){const p=PLANS.find(x=>x.id===ST.plan),paid=ST.paid&&ST.paid.plan===p.term,d=document.querySelector('.rk.due');
+  document.getElementById('dueL').textContent=paid?'Paid':'Due today';document.getElementById('due').textContent='$'+p.price;d.classList.toggle('paid',!!paid);goLock()}
+function goLock(){const g=document.getElementById('go'),h=document.getElementById('goh'),acc=document.getElementById('acc');if(!g||g.dataset.done)return;
+  const ok=ST.max>=3&&acc&&acc.checked;if(ok){delete g.dataset.lock;g.classList.remove('lock');h.textContent='Keep pressing for a second'}else{g.dataset.lock='1';g.classList.add('lock');h.textContent=ST.max<3?'Unlocks at the last step':'Accept the Risk Disclosure first'}}
 pickPlan('m3',false);
 
 
 const steps=[...document.querySelectorAll('.st')],panes=[...document.querySelectorAll('.pane')];
 function go(i){ST.step=i;ST.max=Math.max(ST.max,i);steps.forEach((s,k)=>{s.classList.toggle('on',k===i);s.classList.toggle('done',k<ST.max&&k!==i);s.disabled=false;s.setAttribute('aria-selected',k===i)});
   {const sw=steps[i].parentElement;if(sw.scrollWidth>sw.clientWidth)sw.scrollBy({left:steps[i].getBoundingClientRect().left-sw.getBoundingClientRect().left-16,behavior:STILL?'auto':'smooth'})}
-  panes.forEach((p,k)=>p.classList.toggle('on',k===i));kick();
+  panes.forEach((p,k)=>p.classList.toggle('on',k===i));rcpt();kick();
   const pn=document.querySelector('.panel'),top=pn.getBoundingClientRect().top,rail=document.querySelector('.steps').getBoundingClientRect().top;
   if(top<70||top>innerHeight*.6)scrollTo({top:scrollY+(innerWidth<900?rail-84:top-96),behavior:STILL?'auto':'smooth'});
   const ae=document.activeElement;if(!ae||ae===document.body||ae.closest('.pane:not(.on)')){const h=panes[i].querySelector('h3');if(h){h.tabIndex=-1;h.focus({preventScroll:true})}}}
@@ -1112,7 +1135,7 @@ document.getElementById('keys').addEventListener('submit',e=>{e.preventDefault()
   if(!okK||!okS){kerr.textContent='Binance keys are 64 letters and digits. Copy them again from API Management on Binance.';return}
   if(!document.getElementById('p2').checked||!document.getElementById('p3').checked){kerr.textContent='Turn on futures and keep withdrawals off on Binance, then tick both boxes.';return}
   const btn=document.getElementById('verify');btn.querySelector('.lbl').textContent='Checking keys…';KS.target=100;KS.speed=1400;kick();
-  setTimeout(()=>{ST.keys=true;document.getElementById('s2').textContent='Binance Futures';ak.parentElement.classList.add('ok');sk.parentElement.classList.add('ok');document.getElementById('conn').classList.add('on');
+  setTimeout(()=>{ST.keys=true;document.getElementById('s2').textContent='Binance Futures';document.getElementById('s2').classList.remove('no');ak.parentElement.classList.add('ok');sk.parentElement.classList.add('ok');document.getElementById('conn').classList.add('on');
     btn.querySelector('.lbl').textContent='Continue';KS.target=0;KS.speed=450;burst(KS,now());kick()},1500)});
 
 function skipKeys(){kerr.textContent='';ak.parentElement.classList.remove('bad');sk.parentElement.classList.remove('bad');document.getElementById('s2').textContent='Keys not added yet';go(2)}
@@ -1139,7 +1162,8 @@ setM(100);
 /* launch */
 const GO=liquid(document.getElementById('go'),{color:'up',foam:true,rest:16});GO.restCoins=true;GO.cs=.6;   /* resting foam keeps fizz + small coin bubbles */
 holdable(document.getElementById('go'),GO,()=>{document.getElementById('go').dataset.done=1;document.getElementById('goh').textContent='Starting…';
-  setTimeout(()=>{document.getElementById('pre').style.display='none';document.getElementById('live').classList.add('on');steps[3].classList.add('done');scan()},1100)});
+  setTimeout(()=>{document.getElementById('pre').style.display='none';document.getElementById('live').classList.add('on');document.getElementById('rcpt').classList.add('is-live');steps[3].classList.add('done');scan()},1100)});
+document.getElementById('go').addEventListener('early',()=>{const h=document.getElementById('goh');h.textContent='Finish the four steps first';setTimeout(goLock,1600)});
 document.getElementById('go').addEventListener('pointerdown',()=>{if(!document.getElementById('go').dataset.lock)document.getElementById('goh').textContent='Keep holding…'});
 document.getElementById('go').addEventListener('pointerup',()=>{const g=document.getElementById('go');if(!g.dataset.done&&!g.dataset.lock)document.getElementById('goh').textContent='Keep pressing for a second'});
 function scan(){const ks=['BTC','ETH','SOL','BNB','XRP','DOGE','LINK','AVAX','ADA','DOT','LTC','TRX'];let i=0;
@@ -1259,7 +1283,7 @@ function scan(){const ks=['BTC','ETH','SOL','BNB','XRP','DOGE','LINK','AVAX','AD
 /* ───────── risk disclosure: must be accepted (here or in the side panel) before "Hold to start autopilot" works ───────── */
 (function(){const acc=document.getElementById('acc'),acc2=document.getElementById('acc2'),ok=document.getElementById('rdok'),rd=document.getElementById('rd'),go=document.getElementById('go'),accl=document.getElementById('accl'),goh=document.getElementById('goh');
   let last=null;
-  function sync(v){acc.checked=acc2.checked=v;ok.disabled=!v;if(v){delete go.dataset.lock;go.classList.remove('lock');accl.classList.remove('need');goh.textContent='Keep pressing for a second'}else{go.dataset.lock='1';go.classList.add('lock');goh.textContent='Accept the Risk Disclosure first'}}
+  function sync(v){acc.checked=acc2.checked=v;ok.disabled=!v;if(v)accl.classList.remove('need');goLock()}
   function open(e){e&&e.preventDefault();last=document.activeElement;rd.hidden=false;document.body.classList.add('rdopen');document.getElementById('rdb').scrollTop=0;setTimeout(()=>rd.querySelector('.rd-x').focus(),50)}
   function close(){rd.hidden=true;document.body.classList.remove('rdopen');if(last&&last.focus)last.focus()}
   document.querySelectorAll('.rdl').forEach(a=>a.addEventListener('click',open));
@@ -1298,7 +1322,7 @@ const PAY=(function(){const sh=document.getElementById('pay');let after=null,las
     status('wait');sh.hidden=false;document.body.classList.add('rdopen');setTimeout(()=>sh.querySelector('.rd-x').focus(),60);
     sh.dataset.url=url;sh.dataset.ref=ref;
     /* stands in for the server seeing the reference on-chain */
-    timers.forEach(clearTimeout);timers=[setTimeout(()=>status('found'),5000),setTimeout(()=>{status('ok');ST.paid={ref,order,amount:p.price,plan:p.term};q.classList.add('done')},7500),setTimeout(()=>{close();const c=after;after=null;if(c)c()},9300)]}
+    timers.forEach(clearTimeout);timers=[setTimeout(()=>status('found'),5000),setTimeout(()=>{status('ok');ST.paid={ref,order,amount:p.price,plan:p.term};rcpt();q.classList.add('done')},7500),setTimeout(()=>{close();const c=after;after=null;if(c)c()},9300)]}
   function status(s){const el=document.getElementById('pst');el.className='pst'+(s==='found'?' found':s==='ok'?' ok':'');
     el.querySelector('span').textContent=s==='wait'?'Waiting for your payment…':s==='found'?'Payment found on Solana · confirming…':'Paid · your plan is active'}
   function close(){timers.forEach(clearTimeout);sh.hidden=true;document.body.classList.remove('rdopen');if(last&&last.focus)last.focus()}

@@ -45,7 +45,7 @@ for example `{{FONT:fonts/Anton-Regular.woff2}}`).
 | Hero | `.hero` | Headline, start button, and the trade chart: one illustrated trade with its entry, SL, TP and profit lock, and the four steps beneath. |
 | What the bot does | `#bot` | The bot's market reading (Long/Short liquid pills), the trade log, and four key facts. |
 | On your phone | `#phone` | Four phone screens (plan, trade chart, Solana Pay, dashboard) from `assets/phones/`; a swipeable row on phones. |
-| Set up in four steps | `#setup` | Plan, Connect (keys can be skipped), Margin, Launch (Risk Disclosure must be accepted). |
+| Set up in four steps | `#setup` | A checkout: the current step (Plan, Connect with keys that can be skipped, Margin, Launch with the Risk Disclosure) beside a live "Your autopilot" receipt that holds the start button. |
 | Compare | `#compare` | Competitor facts with sources and the date they were checked. |
 | Questions | `#faq` | |
 | Final band | `.final` | Hold-to-start button. |

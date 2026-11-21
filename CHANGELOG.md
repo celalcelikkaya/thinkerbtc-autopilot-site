@@ -56,6 +56,11 @@ Format:
   higher contrast and browsers without backdrop blur get the same shapes solid.
   The animated coin bubbles behind the hero and the closing band are replaced by a still "market glow": green
   light top left and red light bottom right under a fine frosted grain, drawn in CSS (no canvas, nothing moving).
+  "Get started" is rebuilt as a checkout: the four steps became a glass capsule beside the heading (the empty step
+  column is gone), the plans a list where the chosen one is outlined in green instead of filled, and a glass "Your
+  autopilot" receipt sits beside each step, filling in as you choose and showing what is due or paid. The
+  hold-to-start button moved into the receipt and stays locked until the last step and the Risk Disclosure; the
+  old four-box summary on the Launch step is gone. Headings no longer show a focus ring when a step opens.
 - Files: src/index.src.html, index.html, build.py, assets/phones/*.webp, assets/fonts/Anton-Regular.woff2,
   assets/fonts/Anton-OFL.txt, assets/illustrations/*.svg, mockups/*.png, DESIGN.md, AGENTS.md,
   CONTRIBUTING.md, README.md, CHANGELOG.md
