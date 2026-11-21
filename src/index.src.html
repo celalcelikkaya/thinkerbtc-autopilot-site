@@ -103,10 +103,14 @@ body{padding-top:calc(var(--tick-h) + env(safe-area-inset-top,0px));padding-bott
 
 /* ---------- hero: the headline, then the instrument ---------- */
 .hero{position:relative;padding-block:clamp(28px,4.5vh,56px) 0;overflow:hidden;isolation:isolate}
-.field{position:absolute;inset:0;z-index:-1;pointer-events:none;cursor:default;border-radius:inherit;overflow:hidden}
-.hero>.field{bottom:auto;height:min(100%,560px);-webkit-mask-image:linear-gradient(#000 45%,transparent);mask-image:linear-gradient(#000 45%,transparent)}
-@media (max-width:760px){.hero>.field canvas{opacity:.12!important}}
-.fin>.field{-webkit-mask-image:linear-gradient(#000 55%,transparent 92%);mask-image:linear-gradient(#000 55%,transparent 92%)}
+/* market glow (hero, closing band): green light, the market going up, top left; red light, going down, bottom right;
+   a fine frosted grain over both. Still: nothing moves. */
+.glow{position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;overflow:hidden;
+  background:radial-gradient(42% 60% at 14% 18%,color-mix(in srgb,var(--up) 47%,transparent),transparent 70%),
+    radial-gradient(40% 55% at 92% 78%,color-mix(in srgb,var(--down) 34%,transparent),transparent 70%),
+    radial-gradient(30% 40% at 70% 10%,color-mix(in srgb,var(--up) 14%,transparent),transparent 70%)}
+.glow::after{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px;opacity:.09;mix-blend-mode:overlay}
+.hero>.glow{-webkit-mask-image:linear-gradient(#000 62%,transparent);mask-image:linear-gradient(#000 62%,transparent)}
 .hero-head{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:28px;align-items:end}
 .hero-t{grid-column:1/-1}
 .hero-c{grid-column:1/-1;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:14px;align-items:end}
@@ -603,7 +607,7 @@ body.inapp>header.bar,body.inapp>main,body.inapp>footer,body.inapp>.mcta,body.in
 </header>
 
 <main id="top">
-<section class="hero"><div class="field lp" id="heroField" aria-hidden="true"></div><div class="wrap">
+<section class="hero"><div class="glow" aria-hidden="true"></div><div class="wrap">
   <div class="hero-head">
     <div class="hero-art" aria-hidden="true"><img class="art" src="{{IMG:illustrations/hero-trade-line.svg}}" alt="" width="640" height="440" decoding="async"></div>
     <div class="hero-t">
@@ -802,7 +806,7 @@ body.inapp>header.bar,body.inapp>main,body.inapp>footer,body.inapp>.mcta,body.in
   </div>
 </div></section>
 <section class="final"><div class="wrap"><div class="fin">
-  <div class="field lp" id="finField" aria-hidden="true"></div>
+  <div class="glow" aria-hidden="true"></div>
   <img class="art" src="{{IMG:illustrations/autopilot-hero.svg}}" alt="" aria-hidden="true" width="560" height="400" decoding="async">
   <p class="label">Ready when you are</p>
   <h2>Your bot is one hold away.</h2>
@@ -981,8 +985,6 @@ function holdable(el,s,onFire){let t0=0,id=0;
 const now=()=>performance.now();
 const sg=v=>v>0?'u':v<0?'d':'';   /* green only for a gain, red only for a loss; zero stays neutral */
 
-/* background fields (hero, final band): the same engine as every pill, so bubbles look and move the same everywhere */
-[['heroField',.22,1.4],['finField',.35,1.6]].forEach(([id,op,dens])=>{const s=liquid(document.getElementById(id),{color:'gold'});s.ghost=true;s.glass='white';s.restCoins=true;s.dens=dens;s.p=s.target=s.rest=100;s.c.style.opacity=op});
 
 /* hover buttons fill with green liquid */
 document.querySelectorAll('[data-hover]').forEach(el=>{const s=liquid(el,{color:'deep',foam:true,speed:450});

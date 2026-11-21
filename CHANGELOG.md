@@ -54,6 +54,8 @@ Format:
   corners are larger and concentric, the app's tab bar floats, text uses the system font (SF Pro on Apple
   devices; Archivo no longer loads), and the menu, dialogs and toast arrive on springs. Reduced transparency,
   higher contrast and browsers without backdrop blur get the same shapes solid.
+  The animated coin bubbles behind the hero and the closing band are replaced by a still "market glow": green
+  light top left and red light bottom right under a fine frosted grain, drawn in CSS (no canvas, nothing moving).
 - Files: src/index.src.html, index.html, build.py, assets/phones/*.webp, assets/fonts/Anton-Regular.woff2,
   assets/fonts/Anton-OFL.txt, assets/illustrations/*.svg, mockups/*.png, DESIGN.md, AGENTS.md,
   CONTRIBUTING.md, README.md, CHANGELOG.md

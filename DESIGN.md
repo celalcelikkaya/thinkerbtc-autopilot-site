@@ -166,8 +166,10 @@ dashboard's numbers) stays solid so it reads first. Never put glass on glass.
 
 - **The liquid engine stays** (`liquid(el, options)`): it is the only bubble and liquid system.
   Use it where it means something: button hover fills, plan selection, hold-to-start, the margin
-  tank, the subscriber pool. Background bubble fields (hero, closing band) run faint (opacity .22
-  and .35). Never add a second particle system.
+  tank, the subscriber pool. Never add a second particle system, and no coin or bubble backgrounds.
+- **Market glow** `.glow` (hero, closing band): the background is still light, not particles. Green
+  (`--up`) glows top left, red (`--down`) bottom right, a faint green top right, all under a fine
+  frosted grain (an inline SVG noise at 9%, overlay). In the hero it fades out over the lower third.
 - Engine rules carried over: depth-scaled bubbles, coin bubbles pop with a ring, density comes in
   waves, labels switch to white (white on red, `--ink` on green) past about 55% fill, start buttons rest at
   about 16% fill, no rebuilding animated elements on updates.
