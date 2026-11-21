@@ -101,10 +101,10 @@ body{padding-top:calc(var(--tick-h) + env(safe-area-inset-top,0px));padding-bott
 .btn.dark{background:var(--bg);color:var(--fg);box-shadow:inset 0 0 0 1px var(--line2)}.btn.dark .lbl,.btn.dark>svg{position:relative;color:var(--fg)}
 .btn.dark.full .lbl{color:var(--ink)}
 
-/* ---------- the face: an ASCII portrait that turns to follow the pointer. It opens the page, one screen tall under the
+/* ---------- the face: an ASCII bust (head, hair, neck and shoulders) that turns to follow the pointer. It opens the page, one screen tall under the
    ticker; green characters on black, brightest where the light hits, over a soft green/red glow ---------- */
 .face{position:relative;height:calc(100svh - var(--tick-h) - env(safe-area-inset-top,0px));min-height:26rem;max-height:62rem;overflow:hidden;isolation:isolate}
-.face canvas{position:absolute;inset:0;width:100%;height:100%;display:block;animation:fade 1.4s var(--ease-out) both}
+.face canvas{position:absolute;inset:0;width:100%;height:100%;display:block;animation:fade 1.4s var(--ease-out) both;-webkit-mask-image:linear-gradient(#000 60%,transparent 84%);mask-image:linear-gradient(#000 60%,transparent 84%)}   /* the shoulders fade out before the Scroll cue */
 .face>.glow{background:radial-gradient(34% 44% at 50% 48%,color-mix(in srgb,var(--up) 17%,transparent),transparent 72%),
   radial-gradient(40% 50% at 8% 6%,color-mix(in srgb,var(--up) 14%,transparent),transparent 70%),
   radial-gradient(42% 52% at 94% 94%,color-mix(in srgb,var(--down) 16%,transparent),transparent 70%);
@@ -1058,30 +1058,84 @@ if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!STILL)document.query
   addEventListener('scroll',()=>{if(!raf)y=target=scrollY},{passive:true});   /* keys, the scrollbar and anchor jumps move the page themselves */
 })();
 
-/* ───────── the face: an ASCII portrait drawn from a sculpted depth map, lit from the side; the light and a little
-   parallax follow the pointer anywhere on screen while the face is in view. Redraws only when the gaze moves. ───────── */
+/* ───────── the face: an ASCII bust drawn from a sculpted depth map (head with brows, eyes, nose, lips and chin; ears,
+   hair, neck and shoulders), lit from the side. Hollows catch less light; hair and brows use strand characters. The light
+   and a little parallax follow the pointer anywhere on screen while the face is in view; it redraws only while moving. ───────── */
 (function(){const face=document.getElementById('face'),canvas=face&&face.querySelector('canvas'),ctx=canvas&&canvas.getContext('2d');if(!ctx)return;
-  const glyphs=' .,:;irsxA253hMHGS#9B&@',bump=(x,y,cx,cy,sx,sy)=>Math.exp(-(((x-cx)/sx)**2+((y-cy)/sy)**2));
-  function depth(x,y){const spread=.69-.17*bump(0,y,0,.64,1,.43),oval=(x/spread)**2+((y+.02)/1.01)**2;if(oval>=1)return 0;const side=Math.abs(x);
-    return .72*Math.sqrt(1-oval)+.096*bump(side,y,.31,-.35,.22,.11)-.133*bump(side,y,.31,-.22,.17,.145)+.05*bump(side,y,.32,-.20,.14,.055)+.14*bump(side,y,.37,.07,.23,.22)
-      +.30*bump(x,y,0,-.07,.105,.29)+.21*bump(x,y,0,.14,.16,.105)-.09*bump(side,y,.115,.2,.042,.029)+.055*bump(side,y,.076,.355,.10,.035)
-      -.075*bump(x,y,0,.402+.035*side,.25,.024)+.073*bump(x,y,0,.465,.20,.05)+.11*bump(x,y,0,.67,.24,.15)}
-  /* three inks from the theme: dim green for the shadows, green, and a pale mint where the light is strongest */
+const sm=(a,b,t)=>{t=Math.max(0,Math.min(1,(t-a)/(b-a)));return t*t*(3-2*t)};
+const bump=(x,y,cx,cy,sx,sy)=>Math.exp(-(((x-cx)/sx)**2+((y-cy)/sy)**2));
+function hw(y){
+  if(y<-1||y>.77)return 0;
+  const crown=.6*Math.sqrt(Math.max(0,1-((y+.18)/.84)**2));             // skull: round on top
+  const jawT=sm(.12,.76,y);                                               // jaw tapers below the cheeks
+  const jaw=.6-.36*Math.pow(jawT,1.35)-.08*sm(.62,.76,y);                 // squared jaw, then the chin
+  if(y>.62)return .299*Math.sqrt(Math.max(0,1-((y-.62)/.15)**2));      // the chin's underside is round, not a point
+  return y<.1?crown:Math.min(crown+.02,jaw)}
+function head(x,y){const w=hw(y);if(w<=0)return 0;const u=x/w;if(Math.abs(u)>=1)return 0;
+  const v=Math.max(0,1-u*u);const top=sm(-1,-.75,y);                   // round off the very top
+  return .62*Math.sqrt(v)*(.55+.45*top)*Math.min(1,.35+w/.3)}
+function features(x,y){const s=Math.abs(x);let d=0;
+  d+=.08*bump(s,y,.2,-.175,.16,.04);        // brow ridge
+  d-=.17*bump(s,y,.205,-.075,.11,.06);      // eye socket
+  d+=.11*bump(s,y,.205,-.07,.058,.036);     // eyeball
+  d-=.025*bump(s,y,.205,-.03,.07,.012);     // lower lid line
+  d+=.17*bump(x,y,0,.02,.055,.17);          // nose bridge
+  d+=.10*bump(x,y,0,.17,.075,.06);          // nose tip
+  d+=.045*bump(s,y,.07,.18,.04,.035);       // nostril wings
+  d-=.04*bump(s,y,.04,.215,.022,.015);      // nostrils
+  d+=.07*bump(s,y,.32,.03,.13,.10);         // cheekbones
+  d-=.035*bump(s,y,.3,.24,.12,.1);          // hollow under the cheek
+  d+=.035*bump(x,y,0,.29,.03,.03);          // philtrum
+  d+=.05*bump(x,y,0,.335,.12,.028);         // upper lip
+  d-=.055*bump(x,y,0,.365,.13,.011);        // mouth line
+  d+=.06*bump(x,y,0,.40,.1,.032);           // lower lip
+  d-=.03*bump(x,y,0,.47,.09,.03);           // dip under the lip
+  d+=.08*bump(x,y,0,.62,.12,.08);           // chin
+  return d}
+function ear(x,y){const s=Math.abs(x);return .3*bump(s,y,.6,-.01,.055,.13)}
+function neck(x,y){if(y<.45||y>1.1)return 0;const w=.25+.04*sm(.8,1.05,y);const u=x/w;if(Math.abs(u)>=1)return 0;return .42*Math.sqrt(1-u*u)}
+function shoulders(x,y){const s=Math.abs(x),q=1-(s/1.12)**2-((y-1.55)/.76)**2;if(q<=0)return 0;   // chest and shoulders as one rounded form
+  return .38*Math.sqrt(q)}
+function depth(x,y){const h=head(x,y)+(hairShape(x,y)&&!(head(x,y)>0)?.12:0)+(hairShape(x,y)?.05:0);let d=0;
+  if(h>0)d=h+features(x,y)*sm(.0,.12,h);
+  const e=ear(x,y);if(e>.06&&Math.abs(x)>hw(y)-.04)d=Math.max(d,.18+e*.5);
+  d=Math.max(d,neck(x,y)*(h>0?.0:1),shoulders(x,y));
+  if(h<=0&&neck(x,y)>0)d=Math.max(d,neck(x,y));
+  return d}
+const PART=-.16;
+function hairShape(x,y){const s=Math.abs(x),w=hw(Math.min(y,.0))+.055;                 // hair sits a little outside the skull
+  if(y<-1.06||y>.06)return 0;const top=-1.06+.05*Math.pow(x/.6,2);if(y<top)return 0;if(s>w)return 0;
+  const line=-.52+.14*Math.pow(Math.max(0,s-.05)/.45,2)+.2*sm(.38,.56,s)-.04*sm(.2,0,Math.abs(x-PART));   // hairline, lower at the temples
+  const inFront=y<line, sides=s>hw(y)-.07&&y<.0;return (inFront||sides)?1:0}
+function hair(x,y){return hairShape(x,y)}
+function brow(x,y){const s=Math.abs(x);return bump(s,y,.205,-.165-.03*((s-.2)/.12)**2,.115,.032)}
+function hairFlow(x,y){const dx=x-PART;const side=dx>=0?1:-1;const t=sm(-1,-.2,y);return Math.atan2(.35+1.2*t,side*(1-t*.7))}   // strands fall away from the part
+
+
+  const glyphs=' .,:;irsxA253hMHGS#9B&@';
   const hex=h=>{h=h.replace('#','');return[0,2,4].map(i=>parseInt(h.slice(i,i+2),16))},mix=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t));
-  let inks=[];function setInks(){const up=hex(css('--up')),ink=hex(css('--up-ink'));inks=['rgba('+up+',.42)','rgb('+ink+')','rgb('+mix(ink,[255,255,255],.6)+')']}
-  let W=0,H=0,scale=0,font='',samples=[],raf=0,aimX=0,aimY=0,gx=0,gy=0,vis=true;
+  let inks=[],hairInks=[];function setInks(){const up=hex(css('--up')),ink=hex(css('--up-ink'));inks=['rgba('+up+',.42)','rgb('+ink+')','rgb('+mix(ink,[255,255,255],.6)+')'];hairInks=['rgba('+up+',.28)','rgba('+ink+',.62)','rgb('+mix(ink,[255,255,255],.4)+')']}
+  let W=0,H=0,scale=0,samples=[],raf=0,aimX=0,aimY=0,gx=0,gy=0,vis=true;
   function draw(){raf=0;gx+=(aimX-gx)*.1;gy+=(aimY-gy)*.1;ctx.clearRect(0,0,W,H);
-    const buckets=[[],[],[]];
-    for(const [l,t,nx,ny,nz,rel,tex] of samples){const light=nx*(-.54+.32*gx)+ny*(-.37+.25*gy)+nz*.7,shade=Math.max(0,Math.min(1,.78-light*.69+tex)),b=1-shade;   /* on black the light is the dense glyph */
-      const g=glyphs[Math.round(b*(glyphs.length-1))];if(g===' ')continue;buckets[b<.38?0:b<.72?1:2].push(g,l+gx*rel*scale*.18,t+gy*rel*scale*.12)}
-    buckets.forEach((q,k)=>{ctx.fillStyle=inks[k];for(let i=0;i<q.length;i+=3)ctx.fillText(q[i],q[i+1],q[i+2])});
+    const skin=[[],[],[]],hr=[[],[],[]];
+    for(const [l,t,nx,ny,nz,rel,tex,cav,strand,n] of samples){const light=nx*(-.54+.32*gx)+ny*(-.37+.25*gy)+nz*.7,shade=Math.max(0,Math.min(1,.9-light*.95+tex+Math.max(0,cav)*.022)),b=1-shade;   /* on black the light is the dense glyph */
+      const px=l+gx*rel*scale*.18,py=t+gy*rel*scale*.12;
+      if(strand){const g=b<.16?'.':(n<.55?strand:b<.45?':':';');hr[b<.4?0:b<.75?1:2].push(g,px,py);continue}
+      const g=glyphs[Math.round(b*(glyphs.length-1))];if(g===' ')continue;skin[b<.38?0:b<.72?1:2].push(g,px,py)}
+    const paint=(q,ink)=>{ctx.fillStyle=ink;for(let i=0;i<q.length;i+=3)ctx.fillText(q[i],q[i+1],q[i+2])};
+    hr.forEach((q,k)=>paint(q,hairInks[k]));skin.forEach((q,k)=>paint(q,inks[k]));
     if(Math.abs(aimX-gx)+Math.abs(aimY-gy)>.006)schedule()}
   function schedule(){if(!raf)raf=requestAnimationFrame(draw)}
   function resize(){const r=face.getBoundingClientRect();W=r.width;H=r.height;if(!W||!H)return;const dp=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(W*dp);canvas.height=Math.round(H*dp);ctx.setTransform(dp,0,0,dp,0,0);
-    scale=Math.min(W*.61,H*.38);const fs=Math.max(6,Math.min(10.5,scale/34));font='600 '+fs+'px "JetBrains Mono",ui-monospace,Menlo,monospace';ctx.font=font;ctx.textAlign='center';ctx.textBaseline='middle';setInks();
-    const sx=ctx.measureText('M').width,sy=fs*.93,ox=W/2,oy=H*.45;samples=[];
-    for(let row=-Math.ceil(scale/sy);row<=Math.ceil(scale/sy);row++)for(let col=-Math.ceil(scale*.72/sx);col<=Math.ceil(scale*.72/sx);col++){const x=col*sx/scale,y=row*sy/scale,rel=depth(x,y);if(rel<=0)continue;
-      const d=.008,dx=(depth(x-d,y)-depth(x+d,y))/(2*d),dy=(depth(x,y-d)-depth(x,y+d))/(2*d),len=Math.hypot(dx,dy,1);samples.push([ox+col*sx,oy+row*sy,dx/len,dy/len,1/len,rel,Math.sin(col*127.1+row*311.7)*.055])}
+    scale=Math.min(W*.5,H*.34);const fs=Math.max(6,Math.min(10.5,scale/32));ctx.font='600 '+fs+'px "JetBrains Mono",ui-monospace,Menlo,monospace';ctx.textAlign='center';ctx.textBaseline='middle';setInks();
+    const sx=ctx.measureText('M').width,sy=fs*.93,ox=W/2,oy=H*.43;samples=[];
+    for(let row=Math.floor(-1.08*scale/sy);row<=Math.ceil(1.45*scale/sy);row++)for(let col=-Math.ceil(1.15*scale/sx);col<=Math.ceil(1.15*scale/sx);col++){
+      const x=col*sx/scale,y=row*sy/scale,rel=depth(x,y);if(rel<=0)continue;
+      const d=.008,dx=(depth(x-d,y)-depth(x+d,y))/(2*d),dy=(depth(x,y-d)-depth(x,y+d))/(2*d),len=Math.hypot(dx,dy,1);
+      const e=.022,cav=(depth(x+e,y)+depth(x-e,y)+depth(x,y+e)+depth(x,y-e)-4*rel)/(e*e);   /* hollows: sockets, nostrils, the mouth line */
+      let strand='';const br=brow(x,y);if(hair(x,y)>.5||br>.5){const a=br>.5?0:hairFlow(x,y),k=((a%Math.PI)+Math.PI)%Math.PI;strand=k<.5||k>2.65?'-':k<1.2?'/':k<1.95?'|':'\\'}
+      const n=Math.abs(Math.sin(col*12.9898+row*78.233)*43758.5453%1);
+      samples.push([ox+col*sx,oy+row*sy,dx/len,dy/len,1/len,rel,Math.sin(col*127.1+row*311.7)*.05,cav,strand,n])}
     schedule()}
   new IntersectionObserver(e=>{vis=e[0].isIntersecting}).observe(face);
   if(!STILL){addEventListener('pointermove',e=>{if(!vis)return;const r=face.getBoundingClientRect();aimX=Math.max(-1.3,Math.min(1.3,(e.clientX-r.left)/r.width*2-1));aimY=Math.max(-1.3,Math.min(1.3,(e.clientY-r.top)/r.height*2-1));schedule()},{passive:true});

@@ -130,12 +130,15 @@ dashboard's numbers) stays solid so it reads first. Never put glass on glass.
   small 40). The liquid engine fills it with deeper green on hover.
 - **Secondary** `.btn.ghost`: a clear glass capsule (see Material). `.btn.dark`: `--bg` with an
   outline, used for the closing hold button.
-- **Face** `#face` (the opening screen, above the hero): an ASCII portrait drawn on a canvas from a sculpted depth
-  map, one screen tall under the ticker. Green characters on black in three inks from the theme (`--up` at 42% for
+- **Face** `#face` (the opening screen, above the hero): an ASCII bust drawn on a canvas from a sculpted depth map
+  with human proportions (eyes halfway down the head, brow ridges, eyeballs, nose and nostrils, cheekbones, lips, a
+  rounded chin; ears, neck and sloping shoulders that fade out before the Scroll cue), one screen tall under the
+  ticker. Hollows catch less light, so sockets, nostrils and the mouth line read; hair and brows are drawn with strand
+  characters (`/ | \ -` following the parting) in dimmer inks. Green characters on black in three inks from the theme (`--up` at 42% for
   shadows, `--up-ink`, and `--up-ink` mixed 60% toward white for highlights); on black the brightest light gets the
   densest glyph. The light and a little parallax follow the pointer anywhere on screen while the face is in view;
   it redraws only while the gaze moves. A soft green/red glow sits behind it and a quiet "Scroll" cue links to the
-  hero (`#intro`). Reduced motion keeps it still. The source is the client's `ascii-face.html`, recoloured.
+  hero (`#intro`). Reduced motion keeps it still. The renderer and lighting come from the client's `ascii-face.html`; the head model was rebuilt so it reads as a person.
 - **Trade chart** `.desk`: the hero instrument. Header row (pair, timeframe, an "Illustration" tag,
   live P&L in mono), the canvas, then the four steps as a ruled row whose top rule turns white for
   the current step and green for finished ones.
