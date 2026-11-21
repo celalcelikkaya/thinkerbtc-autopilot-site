@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 400" role="img" aria-labelledby="04-margin-control-title 04-margin-control-desc">
+  <title id="04-margin-control-title">Set the margin</title>
+  <desc id="04-margin-control-desc">Autopilot inspects a broad mechanical slider that represents the margin setting.</desc>
+  <defs>
+  <linearGradient id="04-margin-control-ceramic" x1="0" y1="0" x2=".74" y2="1" gradientUnits="objectBoundingBox">
+    <stop stop-color="#FFFCF2"/><stop offset=".56" stop-color="#F2EADB"/><stop offset="1" stop-color="#B7AD9C"/>
+  </linearGradient>
+  <linearGradient id="04-margin-control-ceramic-side" x2=".72" y2="1">
+    <stop stop-color="#F8F1E3"/><stop offset="1" stop-color="#AA9E8E"/>
+  </linearGradient>
+  <linearGradient id="04-margin-control-visor" x2=".76" y2="1">
+    <stop stop-color="#37546A"/><stop offset=".48" stop-color="#1F3447"/><stop offset="1" stop-color="#111E2B"/>
+  </linearGradient>
+  <linearGradient id="04-margin-control-metal" x2=".54" y2="1">
+    <stop stop-color="#53758A"/><stop offset=".50" stop-color="#304C62"/><stop offset="1" stop-color="#172739"/>
+  </linearGradient>
+  <linearGradient id="04-margin-control-green" x2=".68" y2="1">
+    <stop stop-color="#54CF9E"/><stop offset=".45" stop-color="#15C880"/><stop offset="1" stop-color="#0F935E"/>
+  </linearGradient>
+  <linearGradient id="04-margin-control-paper" x2=".75" y2="1">
+    <stop stop-color="#FFFCF3"/><stop offset="1" stop-color="#E1DACB"/>
+  </linearGradient>
+  <linearGradient id="04-margin-control-signal-fill" x1="0" x2="0" y2="1">
+    <stop stop-color="#94B5C8" stop-opacity=".65"/><stop offset="1" stop-color="#94B5C8" stop-opacity="0"/>
+  </linearGradient>
+  <radialGradient id="04-margin-control-shadow">
+    <stop stop-color="#0B1520" stop-opacity=".47"/><stop offset="1" stop-color="#0B1520" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="04-margin-control-air">
+    <stop stop-color="#8EAABC" stop-opacity=".25"/><stop offset=".65" stop-color="#7999AE" stop-opacity=".12"/><stop offset="1" stop-color="#7999AE" stop-opacity="0"/>
+  </radialGradient>
+  </defs>
+  <ellipse cx="280" cy="218" rx="250" ry="164" fill="url(#04-margin-control-air)"/><ellipse cx="286" cy="338" rx="199" ry="21" fill="url(#04-margin-control-shadow)"/>
+    <!-- Autopilot capsule, ivory shell and offset navy visor -->
+    <g transform="translate(246 55) rotate(17) scale(0.64)">
+      <g>
+        <path d="M301 113c25 0 47 8 62 18q7 5 0 10l-62 5Z" fill="url(#04-margin-control-metal)" stroke="#172739" stroke-width="2"/>
+        <path d="M44 67c13-34 47-55 91-60 37-4 97-3 139 7 39 9 66 35 70 69l1 25c-3 52-42 72-98 78-46 5-105 6-144 0C59 178 31 149 29 110q-2-26 15-43Z" fill="url(#04-margin-control-ceramic-side)" stroke="#A99D8B" stroke-width="2"/>
+        <path d="M42 81c24 6 46 8 72 9l221-5q9 0 9 9v13q0 7-8 8l-224 8c-31-1-54-4-76-9q-7-2-7-9V92q1-10 13-11Z" fill="url(#04-margin-control-green)" stroke="#189765" stroke-width="1.5"/>
+        <path d="M34 83C49 40 78 18 126 9q54-8 124 2c49 7 83 30 93 67q4 14-7 14l-224 3-74-7q-6-1-4-5Z" fill="url(#04-margin-control-ceramic)" stroke="#EAE0D0" stroke-width="1.75"/>
+        <path d="M104 86c16-38 43-65 81-74q38-6 83 3c36 7 62 26 73 58" fill="none" stroke="#A39582" stroke-opacity=".73" stroke-width="1.9" stroke-linecap="round"/>
+        <path d="M107 85c16-37 42-62 78-71q31-6 71 0" fill="none" stroke="#FFFBEC" stroke-width="2" stroke-linecap="round"/>
+        <path d="M37 112q34 8 74 8l223-7q10-1 7 11c-12 39-45 57-92 61-37 4-76 5-108 3-38-6-61-23-78-48q-11-15-24-23Z" fill="url(#04-margin-control-ceramic)" stroke="#C4B7A5" stroke-width="1.5"/>
+        <path d="M111 91c8-29 30-50 59-54 28-4 81-3 111 0 31 3 52 24 53 49 2 32-14 58-44 65-28 6-93 8-126 4-38-5-63-29-53-64Z" fill="#A89B8A"/>
+        <path d="M115 92c8-28 29-47 56-50 30-4 80-3 109 0 28 3 48 22 49 45 2 30-15 53-41 59-28 6-91 8-124 4-35-4-56-26-49-58Z" fill="url(#04-margin-control-visor)" stroke="#111E2B" stroke-width="2.6"/>
+        <path d="M126 84c9-21 25-33 46-37 28-3 73-3 102-1" fill="none" stroke="#A4BACA" stroke-opacity=".26" stroke-width="2.3" stroke-linecap="round"/>
+        <path d="M123 118c9 16 21 23 42 27 28 4 80 4 119-2" fill="none" stroke="#7191A8" stroke-opacity=".39" stroke-width="1.75" stroke-linecap="round"/>
+        <g transform="translate(-8 0)" fill="#F6F2E8"><rect x="173" y="82" width="12" height="20" rx="6"/><rect x="251" y="76" width="12" height="25" rx="6"/><rect x="205" y="113" width="33" height="5.5" rx="2.75" fill="url(#04-margin-control-green)"/></g>
+        <path d="M31 126q18-2 35 7 10 6 12 19 0 4-6 4l-55-3q-16-2-14-10 6-6 28-17Z" fill="url(#04-margin-control-metal)" stroke="#172739" stroke-width="2.4"/>
+        <path d="M9 143q22 1 48-9" fill="none" stroke="#86A4B8" stroke-opacity=".4" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M134 167c34 11 95 11 132 3" fill="none" stroke="#FFFCF2" stroke-opacity=".67" stroke-width="1.75" stroke-linecap="round"/>
+        <path d="M288 156l8-2m-4 6 8-2" fill="none" stroke="#8D8071" stroke-opacity=".7" stroke-width="1.7" stroke-linecap="round"/>
+      </g>
+    </g>
+    <g transform="rotate(-6 269 267)">
+      <rect x="57" y="247" width="429" height="87" rx="43" fill="#111E2B" opacity=".22"/>
+      <rect x="57" y="232" width="429" height="88" rx="44" fill="url(#04-margin-control-metal)" stroke="#2E4A5E" stroke-width="2.5"/>
+      <rect x="66" y="237" width="410" height="71" rx="35" fill="url(#04-margin-control-ceramic)" stroke="#D3C7B5" stroke-width="1.7"/>
+      <path d="M108 269h326" fill="none" stroke="#233747" stroke-width="13" stroke-linecap="round"/>
+      <path d="M108 269h162" fill="none" stroke="url(#04-margin-control-green)" stroke-width="10" stroke-linecap="round"/>
+      <path d="M111 290v5m64-5v5m64-5v5m64-5v5m64-5v5m64-5v5" stroke="#53758A" stroke-width="2.3" stroke-linecap="round"/>
+      <circle cx="270" cy="274" r="25" fill="#142638" opacity=".30"/>
+      <circle cx="270" cy="268" r="25" fill="url(#04-margin-control-green)" stroke="#148659" stroke-width="1.7"/>
+      <circle cx="270" cy="266" r="15" fill="url(#04-margin-control-ceramic)" stroke="#FFF7E5" stroke-width="1.4"/>
+      <path d="M266 262v8m7-8v8" stroke="#6A5B4D" stroke-width="1.7" stroke-linecap="round"/>
+    </g>
+    <path d="M245 207q-9-15 0-26m-16 30q-10-10-10-16" stroke="#3EC48E" opacity=".82" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+    <path d="M0 -9Q1 -1 9 0Q1 1 0 9Q-1 1 -9 0Q-1 -1 0 -9Z" fill="#A5BED0" transform="translate(136 131) scale(1.05)"/><path d="M0 -9Q1 -1 9 0Q1 1 0 9Q-1 1 -9 0Q-1 -1 0 -9Z" fill="#A5BED0" transform="translate(472 232) scale(0.58)"/>
+</svg>

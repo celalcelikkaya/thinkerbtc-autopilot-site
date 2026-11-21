@@ -32,15 +32,19 @@ then open http://localhost:8000.
 
 4. Commit both `src/index.src.html` and the rebuilt `index.html`.
 
-Placeholders in the source: `{{LOGO}}`, `{{COIN:BTC}}` (any coin file name) and `{{COINS}}`.
+Placeholders in the source: `{{LOGO}}`, `{{COIN:BTC}}` (any coin file name), `{{COINS}}`, `{{IMG:path}}`
+(any image under `assets/`, for example `{{IMG:phones/plans.webp}}`) and `{{FONT:path}}` (a font under `assets/`,
+for example `{{FONT:fonts/Anton-Regular.woff2}}`).
 
 ## Page map
 
 | Section | Selector | Notes |
 |---|---|---|
-| Top bar | `.bar` | Menu and gold start button. Becomes "My dashboard" once a user has launched. |
-| Hero | `.hero` | Coin bubbles, a phone showing the bot's Long/Short reading, and a trade story. |
-| What the bot does | `#bot` | Animated trade chart (illustrative values) and four steps. |
+| Coin ticker | `body > .tape` | Live-looking coin prices, pinned to the top of the screen. |
+| Menu bar | `.bar` | Floating at the bottom centre: logo, section links (or a menu button), and the start button, which becomes "My dashboard" once a user has launched. |
+| Hero | `.hero` | Headline, start button, and the trade chart: one illustrated trade with its entry, SL, TP and profit lock, and the four steps beneath. |
+| What the bot does | `#bot` | The bot's market reading (Long/Short liquid pills), the trade log, and four key facts. |
+| On your phone | `#phone` | Four phone screens (plan, trade chart, Solana Pay, dashboard) from `assets/phones/`; a swipeable row on phones. |
 | Set up in four steps | `#setup` | Plan, Connect (keys can be skipped), Margin, Launch (Risk Disclosure must be accepted). |
 | Compare | `#compare` | Competitor facts with sources and the date they were checked. |
 | Questions | `#faq` | |
