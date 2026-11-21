@@ -67,8 +67,8 @@ Format:
   The page now opens on a face: the client's interactive ASCII portrait, recoloured to green characters on black
   (brightest where the light hits) over a soft green and red glow. It fills the first screen under the ticker and
   turns to follow the pointer; a "Scroll" cue leads to the hero, which now carries the id `intro`. Its head was
-  rebuilt with human proportions so it no longer reads as an alien: brows, eyeballs, nose, lips and a rounded chin,
-  ears, hair drawn in strands, a neck and sloping shoulders, with hollows shaded darker.
+  rebuilt as an original android: armour plates with seams and a crest, slanted eye slits that glow, a vent grille,
+  sensor discs, a segmented neck and plated shoulders.
 - Files: src/index.src.html, index.html, build.py, assets/phones/*.webp, assets/fonts/Anton-Regular.woff2,
   assets/fonts/Anton-OFL.txt, assets/illustrations/*.svg, mockups/*.png, DESIGN.md, AGENTS.md,
   CONTRIBUTING.md, README.md, CHANGELOG.md

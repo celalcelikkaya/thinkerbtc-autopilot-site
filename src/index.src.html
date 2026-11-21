@@ -101,7 +101,7 @@ body{padding-top:calc(var(--tick-h) + env(safe-area-inset-top,0px));padding-bott
 .btn.dark{background:var(--bg);color:var(--fg);box-shadow:inset 0 0 0 1px var(--line2)}.btn.dark .lbl,.btn.dark>svg{position:relative;color:var(--fg)}
 .btn.dark.full .lbl{color:var(--ink)}
 
-/* ---------- the face: an ASCII bust (head, hair, neck and shoulders) that turns to follow the pointer. It opens the page, one screen tall under the
+/* ---------- the face: an original ASCII android (armour plates, glowing eye slits) that turns to follow the pointer. It opens the page, one screen tall under the
    ticker; green characters on black, brightest where the light hits, over a soft green/red glow ---------- */
 .face{position:relative;height:calc(100svh - var(--tick-h) - env(safe-area-inset-top,0px));min-height:26rem;max-height:62rem;overflow:hidden;isolation:isolate}
 .face canvas{position:absolute;inset:0;width:100%;height:100%;display:block;animation:fade 1.4s var(--ease-out) both;-webkit-mask-image:linear-gradient(#000 60%,transparent 84%);mask-image:linear-gradient(#000 60%,transparent 84%)}   /* the shoulders fade out before the Scroll cue */
@@ -1058,84 +1058,72 @@ if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!STILL)document.query
   addEventListener('scroll',()=>{if(!raf)y=target=scrollY},{passive:true});   /* keys, the scrollbar and anchor jumps move the page themselves */
 })();
 
-/* ───────── the face: an ASCII bust drawn from a sculpted depth map (head with brows, eyes, nose, lips and chin; ears,
-   hair, neck and shoulders), lit from the side. Hollows catch less light; hair and brows use strand characters. The light
-   and a little parallax follow the pointer anywhere on screen while the face is in view; it redraws only while moving. ───────── */
+/* ───────── the face: an original android bust in ASCII. Flat armour plates with seams, a crest, slanted eye slits that
+   glow, a vent grille, sensor discs, a segmented neck and plated shoulders, lit from the side; the light and a little
+   parallax follow the pointer anywhere on screen while the face is in view. Redraws only while the gaze moves. ───────── */
 (function(){const face=document.getElementById('face'),canvas=face&&face.querySelector('canvas'),ctx=canvas&&canvas.getContext('2d');if(!ctx)return;
 const sm=(a,b,t)=>{t=Math.max(0,Math.min(1,(t-a)/(b-a)));return t*t*(3-2*t)};
-const bump=(x,y,cx,cy,sx,sy)=>Math.exp(-(((x-cx)/sx)**2+((y-cy)/sy)**2));
-function hw(y){
-  if(y<-1||y>.77)return 0;
-  const crown=.6*Math.sqrt(Math.max(0,1-((y+.18)/.84)**2));             // skull: round on top
-  const jawT=sm(.12,.76,y);                                               // jaw tapers below the cheeks
-  const jaw=.6-.36*Math.pow(jawT,1.35)-.08*sm(.62,.76,y);                 // squared jaw, then the chin
-  if(y>.62)return .299*Math.sqrt(Math.max(0,1-((y-.62)/.15)**2));      // the chin's underside is round, not a point
-  return y<.1?crown:Math.min(crown+.02,jaw)}
-function head(x,y){const w=hw(y);if(w<=0)return 0;const u=x/w;if(Math.abs(u)>=1)return 0;
-  const v=Math.max(0,1-u*u);const top=sm(-1,-.75,y);                   // round off the very top
-  return .62*Math.sqrt(v)*(.55+.45*top)*Math.min(1,.35+w/.3)}
-function features(x,y){const s=Math.abs(x);let d=0;
-  d+=.08*bump(s,y,.2,-.175,.16,.04);        // brow ridge
-  d-=.17*bump(s,y,.205,-.075,.11,.06);      // eye socket
-  d+=.11*bump(s,y,.205,-.07,.058,.036);     // eyeball
-  d-=.025*bump(s,y,.205,-.03,.07,.012);     // lower lid line
-  d+=.17*bump(x,y,0,.02,.055,.17);          // nose bridge
-  d+=.10*bump(x,y,0,.17,.075,.06);          // nose tip
-  d+=.045*bump(s,y,.07,.18,.04,.035);       // nostril wings
-  d-=.04*bump(s,y,.04,.215,.022,.015);      // nostrils
-  d+=.07*bump(s,y,.32,.03,.13,.10);         // cheekbones
-  d-=.035*bump(s,y,.3,.24,.12,.1);          // hollow under the cheek
-  d+=.035*bump(x,y,0,.29,.03,.03);          // philtrum
-  d+=.05*bump(x,y,0,.335,.12,.028);         // upper lip
-  d-=.055*bump(x,y,0,.365,.13,.011);        // mouth line
-  d+=.06*bump(x,y,0,.40,.1,.032);           // lower lip
-  d-=.03*bump(x,y,0,.47,.09,.03);           // dip under the lip
-  d+=.08*bump(x,y,0,.62,.12,.08);           // chin
+const lerp=(pts,y)=>{if(y<=pts[0][0]||y>=pts[pts.length-1][0])return 0;for(let i=1;i<pts.length;i++)if(y<=pts[i][0]){const [y0,w0]=pts[i-1],[y1,w1]=pts[i];return w0+(w1-w0)*(y-y0)/(y1-y0)}return 0};
+const groove=(dist,w)=>Math.max(0,1-dist/w);                         // 1 on the seam line, 0 beyond its width
+const SIL=[[-1.0,.0],[-.98,.26],[-.86,.48],[-.62,.6],[-.1,.6],[.14,.55],[.44,.4],[.68,.15],[.74,.0]];   // angular head outline
+function hw(y){return lerp(SIL,y)}
+function plates(x,y){const w=hw(y);if(w<=0)return 0;const s=Math.abs(x),u=s/w;if(u>=1)return 0;
+  let d=.6-.62*Math.max(0,u-.3)/.7;                                    // flat face panel, then slanted side planes
+  d-=.34*Math.max(0,(-.58-y)/.42);                                     // cranium slopes back
+  d-=.26*Math.max(0,(y-.36)/.38);                                      // jaw plane
+  d+=.05*Math.max(0,1-s/.06)*sm(.0,-.2,y)*(y>-.98?1:0);                 // crest ridge down the forehead
+  d+=.07*(y>-.34&&y<-.16?1:0)*Math.max(0,1-Math.abs(y-(-.25+.12*(s/.46)))/.06)*(s<.5?1:0);  // brow plate, lower toward the middle
+  d+=.09*Math.max(0,1-s/(.03+.06*sm(-.02,.18,y)))*(y>-.06&&y<.2?1:0);   // angular nose ridge
+  d+=.06*(s<.15?1:0)*sm(.52,.58,y)*sm(.74,.66,y);                        // chin plate
+  // seams between the plates
+  const cheek=Math.abs(s-(.37-.12*sm(-.05,.45,y)));d-=.06*groove(cheek,.012)*(y>-.04&&y<.48?1:0);
+  d-=.05*groove(Math.abs(y-(-.6+.05*s)),.012)*(s<w-.02?1:0);            // cranium seam
+  d-=.05*groove(Math.abs(s-.0),.008)*(y<-.62?1:0);                      // centre seam over the top
+  // the eye sockets are recessed
+  d-=.09*eyeMask(x,y,.05);
+  // vent grille: a recessed panel with horizontal slots
+  if(s<.17&&y>.29&&y<.45){d-=.03;const k=((y-.29)/.034)%1;d-=.045*(k<.38?1:0)}
   return d}
-function ear(x,y){const s=Math.abs(x);return .3*bump(s,y,.6,-.01,.055,.13)}
-function neck(x,y){if(y<.45||y>1.1)return 0;const w=.25+.04*sm(.8,1.05,y);const u=x/w;if(Math.abs(u)>=1)return 0;return .42*Math.sqrt(1-u*u)}
-function shoulders(x,y){const s=Math.abs(x),q=1-(s/1.12)**2-((y-1.55)/.76)**2;if(q<=0)return 0;   // chest and shoulders as one rounded form
-  return .38*Math.sqrt(q)}
-function depth(x,y){const h=head(x,y)+(hairShape(x,y)&&!(head(x,y)>0)?.12:0)+(hairShape(x,y)?.05:0);let d=0;
-  if(h>0)d=h+features(x,y)*sm(.0,.12,h);
-  const e=ear(x,y);if(e>.06&&Math.abs(x)>hw(y)-.04)d=Math.max(d,.18+e*.5);
-  d=Math.max(d,neck(x,y)*(h>0?.0:1),shoulders(x,y));
-  if(h<=0&&neck(x,y)>0)d=Math.max(d,neck(x,y));
-  return d}
-const PART=-.16;
-function hairShape(x,y){const s=Math.abs(x),w=hw(Math.min(y,.0))+.055;                 // hair sits a little outside the skull
-  if(y<-1.06||y>.06)return 0;const top=-1.06+.05*Math.pow(x/.6,2);if(y<top)return 0;if(s>w)return 0;
-  const line=-.52+.14*Math.pow(Math.max(0,s-.05)/.45,2)+.2*sm(.38,.56,s)-.04*sm(.2,0,Math.abs(x-PART));   // hairline, lower at the temples
-  const inFront=y<line, sides=s>hw(y)-.07&&y<.0;return (inFront||sides)?1:0}
-function hair(x,y){return hairShape(x,y)}
-function brow(x,y){const s=Math.abs(x);return bump(s,y,.205,-.165-.03*((s-.2)/.12)**2,.115,.032)}
-function hairFlow(x,y){const dx=x-PART;const side=dx>=0?1:-1;const t=sm(-1,-.2,y);return Math.atan2(.35+1.2*t,side*(1-t*.7))}   // strands fall away from the part
+function eyeMask(x,y,pad=0){const s=Math.abs(x);if(s<.08-pad||s>.37+pad)return 0;
+  const c=-.07+.07*sm(.37,.08,s);                                       // slanted: inner corners lower
+  const half=.026+.018*Math.sin(Math.PI*Math.max(0,Math.min(1,(s-.08)/.29)))*(1-.5*sm(.2,.37,s))+pad;   /* wider at the inner end, a blade toward the temple */
+  return Math.abs(y-c)<half?1:0}
+function sensor(x,y){const s=Math.abs(x),r=Math.hypot(s-.63,y+.02);if(r>.11)return 0;return .26+.06*(r<.06?1:0)-.05*groove(Math.abs(r-.085),.012)}
+function neck(x,y){if(y<.5||y>1.1)return 0;const s=Math.abs(x),w=.21;if(s>=w)return 0;let d=.36*Math.sqrt(1-(s/w)**2);
+  d-=.05*groove(Math.abs(((y-.5)/.075)%1-.5)*.075,.01);               // segmented rings
+  d+=.05*groove(Math.abs(s-.13),.025);return d}                          // two pistons
+function shoulders(x,y){const s=Math.abs(x);const top=.8+.28*sm(.16,.95,s);if(y<top||s>1.08)return 0;
+  const yy=y-top;let d=.3-.22*Math.max(0,(s-.5)/.58)-.32*yy;          // chest plate tilts back, shoulder plates fall away
+  d-=.06*groove(Math.abs(s-.5),.014);                                     // seam between chest and shoulder plates
+  d-=.05*groove(Math.abs(yy-.1),.012)*(s>.22?1:0);                         // collar seam
+  return d*sm(1.08,.96,s)*sm(0,.04,yy)}
+function depth(x,y){let d=plates(x,y);const e=sensor(x,y);if(e>0&&Math.abs(x)>hw(y)-.05)d=Math.max(d,e);
+  if(d<=0){d=Math.max(neck(x,y),shoulders(x,y))}else{d=Math.max(d,shoulders(x,y))}
+  return Math.max(0,d)}
+function glow(x,y){return eyeMask(x,y)}
 
 
-  const glyphs=' .,:;irsxA253hMHGS#9B&@';
+  const glyphs=' .,:-=+*#%@';   /* a smooth ramp, so each plate reads as one surface */
   const hex=h=>{h=h.replace('#','');return[0,2,4].map(i=>parseInt(h.slice(i,i+2),16))},mix=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t));
-  let inks=[],hairInks=[];function setInks(){const up=hex(css('--up')),ink=hex(css('--up-ink'));inks=['rgba('+up+',.42)','rgb('+ink+')','rgb('+mix(ink,[255,255,255],.6)+')'];hairInks=['rgba('+up+',.28)','rgba('+ink+',.62)','rgb('+mix(ink,[255,255,255],.4)+')']}
-  let W=0,H=0,scale=0,samples=[],raf=0,aimX=0,aimY=0,gx=0,gy=0,vis=true;
+  let inks=[],eyeInk='',eyeGlow='';function setInks(){const up=hex(css('--up')),ink=hex(css('--up-ink'));inks=['rgba('+up+',.42)','rgb('+ink+')','rgb('+mix(ink,[255,255,255],.6)+')'];eyeInk='rgb('+mix(ink,[255,255,255],.92)+')';eyeGlow='rgba('+ink+',.95)'}
+  let W=0,H=0,scale=0,samples=[],eyes=[],raf=0,aimX=0,aimY=0,gx=0,gy=0,vis=true;
   function draw(){raf=0;gx+=(aimX-gx)*.1;gy+=(aimY-gy)*.1;ctx.clearRect(0,0,W,H);
-    const skin=[[],[],[]],hr=[[],[],[]];
-    for(const [l,t,nx,ny,nz,rel,tex,cav,strand,n] of samples){const light=nx*(-.54+.32*gx)+ny*(-.37+.25*gy)+nz*.7,shade=Math.max(0,Math.min(1,.9-light*.95+tex+Math.max(0,cav)*.022)),b=1-shade;   /* on black the light is the dense glyph */
-      const px=l+gx*rel*scale*.18,py=t+gy*rel*scale*.12;
-      if(strand){const g=b<.16?'.':(n<.55?strand:b<.45?':':';');hr[b<.4?0:b<.75?1:2].push(g,px,py);continue}
-      const g=glyphs[Math.round(b*(glyphs.length-1))];if(g===' ')continue;skin[b<.38?0:b<.72?1:2].push(g,px,py)}
-    const paint=(q,ink)=>{ctx.fillStyle=ink;for(let i=0;i<q.length;i+=3)ctx.fillText(q[i],q[i+1],q[i+2])};
-    hr.forEach((q,k)=>paint(q,hairInks[k]));skin.forEach((q,k)=>paint(q,inks[k]));
+    const q=[[],[],[]];
+    for(const [l,t,nx,ny,nz,rel,tex] of samples){const light=nx*(-.54+.32*gx)+ny*(-.37+.25*gy)+nz*.7,shade=Math.max(0,Math.min(1,.9-light*.95+tex)),b=.2+.8*(1-shade);   /* a little ambient keeps the shadow side visible */
+      const g=glyphs[Math.round(b*(glyphs.length-1))];if(g===' ')continue;q[b<.38?0:b<.72?1:2].push(g,l+gx*rel*scale*.18,t+gy*rel*scale*.12)}
+    q.forEach((a,k)=>{ctx.fillStyle=inks[k];for(let i=0;i<a.length;i+=3)ctx.fillText(a[i],a[i+1],a[i+2])});
+    /* the eyes glow, whatever the light */
+    ctx.save();ctx.fillStyle=eyeInk;ctx.shadowColor=eyeGlow;for(const blur of [22,6]){ctx.shadowBlur=blur;for(const [l,t,rel] of eyes)ctx.fillText('\u2588',l+gx*rel*scale*.18,t+gy*rel*scale*.12)}ctx.restore();
     if(Math.abs(aimX-gx)+Math.abs(aimY-gy)>.006)schedule()}
   function schedule(){if(!raf)raf=requestAnimationFrame(draw)}
   function resize(){const r=face.getBoundingClientRect();W=r.width;H=r.height;if(!W||!H)return;const dp=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(W*dp);canvas.height=Math.round(H*dp);ctx.setTransform(dp,0,0,dp,0,0);
     scale=Math.min(W*.5,H*.34);const fs=Math.max(6,Math.min(10.5,scale/32));ctx.font='600 '+fs+'px "JetBrains Mono",ui-monospace,Menlo,monospace';ctx.textAlign='center';ctx.textBaseline='middle';setInks();
-    const sx=ctx.measureText('M').width,sy=fs*.93,ox=W/2,oy=H*.43;samples=[];
-    for(let row=Math.floor(-1.08*scale/sy);row<=Math.ceil(1.45*scale/sy);row++)for(let col=-Math.ceil(1.15*scale/sx);col<=Math.ceil(1.15*scale/sx);col++){
+    const sx=ctx.measureText('M').width,sy=fs*.93,ox=W/2,oy=H*.43;samples=[];eyes=[];
+    for(let row=Math.floor(-1.05*scale/sy);row<=Math.ceil(1.45*scale/sy);row++)for(let col=-Math.ceil(1.15*scale/sx);col<=Math.ceil(1.15*scale/sx);col++){
       const x=col*sx/scale,y=row*sy/scale,rel=depth(x,y);if(rel<=0)continue;
+      if(glow(x,y)){eyes.push([ox+col*sx,oy+row*sy,rel]);continue}
       const d=.008,dx=(depth(x-d,y)-depth(x+d,y))/(2*d),dy=(depth(x,y-d)-depth(x,y+d))/(2*d),len=Math.hypot(dx,dy,1);
-      const e=.022,cav=(depth(x+e,y)+depth(x-e,y)+depth(x,y+e)+depth(x,y-e)-4*rel)/(e*e);   /* hollows: sockets, nostrils, the mouth line */
-      let strand='';const br=brow(x,y);if(hair(x,y)>.5||br>.5){const a=br>.5?0:hairFlow(x,y),k=((a%Math.PI)+Math.PI)%Math.PI;strand=k<.5||k>2.65?'-':k<1.2?'/':k<1.95?'|':'\\'}
-      const n=Math.abs(Math.sin(col*12.9898+row*78.233)*43758.5453%1);
-      samples.push([ox+col*sx,oy+row*sy,dx/len,dy/len,1/len,rel,Math.sin(col*127.1+row*311.7)*.05,cav,strand,n])}
+      samples.push([ox+col*sx,oy+row*sy,dx/len,dy/len,1/len,rel,Math.sin(col*127.1+row*311.7)*.04])}
     schedule()}
   new IntersectionObserver(e=>{vis=e[0].isIntersecting}).observe(face);
   if(!STILL){addEventListener('pointermove',e=>{if(!vis)return;const r=face.getBoundingClientRect();aimX=Math.max(-1.3,Math.min(1.3,(e.clientX-r.left)/r.width*2-1));aimY=Math.max(-1.3,Math.min(1.3,(e.clientY-r.top)/r.height*2-1));schedule()},{passive:true});
