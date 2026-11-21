@@ -136,10 +136,23 @@ dashboard's numbers) stays solid so it reads first. Never put glass on glass.
   discs where ears would be, a segmented neck with pistons, and plated shoulders that fade out before the Scroll cue.
   One screen tall under the ticker. A smooth glyph ramp (`. , : - = + * # % @`) keeps each plate reading as one
   surface; a little ambient light keeps the shadow side visible. The light and a little parallax follow the pointer
-  anywhere on screen while it is in view; it redraws only while the gaze moves. A soft green/red glow sits behind it
+  anywhere on screen while it is in view; it redraws only while the gaze moves. Behind him, "AUTOPILOT" in Anton
+  (`.face-word`, up to 20rem, a silver gradient from 20% to 5% white): the head paints its own cells in `--bg` first,
+  so it truly covers the word, and the word drifts a little against the pointer for depth. From 1024px it sits at eye
+  level, poster style; on tablets and phones, where the head would hide it, it moves up above the crown. A soft
+  green/red glow sits behind it
   and a quiet "Scroll" cue links to the hero (`#intro`). Reduced motion keeps it still. It is an original design, not a
   copy of any film or comic character; keep it that way. The renderer and lighting come from the client's
   `ascii-face.html`.
+- **Gate** `#gate` (inside the face screen): the site opens on the android alone, with no menu bar, and does not
+  scroll. A short note ("Before you enter", what ThinkerBTC does, the risk line from the Risk Disclosure and a link
+  to it) over a fade, and **Accept and enter**, a green capsule sitting exactly where the menu bar will be. Accepting
+  fades the note, folds the button away and opens the menu bar out of it (`clip-path` from the button's width to
+  full, `--spring`), the links fade in one after another, Start autopilot pops in beside it (`--spring-bounce`), the
+  Scroll cue appears and the page unlocks. While the gate is up, everything else is `inert` and touch scrolling is
+  stopped. It is decided before the first paint (`html.gated`, set by a tiny script at the top of the page) and
+  remembered for the session (`sessionStorage` `tbtc-entered`); a direct link to `#dashboard` skips it. Reduced
+  motion turns the opening into a fade.
 - **Trade chart** `.desk`: the hero instrument. Header row (pair, timeframe, an "Illustration" tag,
   live P&L in mono), the canvas, then the four steps as a ruled row whose top rule turns white for
   the current step and green for finished ones.

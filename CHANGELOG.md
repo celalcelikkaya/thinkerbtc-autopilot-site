@@ -68,7 +68,12 @@ Format:
   (brightest where the light hits) over a soft green and red glow. It fills the first screen under the ticker and
   turns to follow the pointer; a "Scroll" cue leads to the hero, which now carries the id `intro`. Its head was
   rebuilt as an original android: armour plates with seams and a crest, slanted eye slits that glow, a vent grille,
-  sensor discs, a segmented neck and plated shoulders.
+  sensor discs, a segmented neck and plated shoulders. "AUTOPILOT" stands behind him in huge silver Anton, covered by
+  his head like a film poster and drifting slightly against the pointer; on tablets and phones it sits above his head.
+  The site now opens on the android alone, with no menu bar and no scrolling, behind a short gate: what ThinkerBTC
+  does, the risk line and a link to the Risk Disclosure, and an "Accept and enter" button. Accepting opens the menu
+  bar out of the button, brings in Start autopilot and the Scroll cue, and unlocks the page; the choice is remembered
+  for the session, and a direct link to the dashboard skips it.
 - Files: src/index.src.html, index.html, build.py, assets/phones/*.webp, assets/fonts/Anton-Regular.woff2,
   assets/fonts/Anton-OFL.txt, assets/illustrations/*.svg, mockups/*.png, DESIGN.md, AGENTS.md,
   CONTRIBUTING.md, README.md, CHANGELOG.md
