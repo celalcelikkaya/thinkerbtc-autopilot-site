@@ -64,6 +64,9 @@ Format:
   Scrolling feels fluid: mouse-wheel notches glide as one smooth movement (trackpads and touch keep their own
   momentum), the hero eases in once on load, and each section's content rises softly into place as it scrolls into
   view, tied to the scroll so it never stays hidden. Reduced motion turns all of it off.
+  The page now opens on a face: the client's interactive ASCII portrait, recoloured to green characters on black
+  (brightest where the light hits) over a soft green and red glow. It fills the first screen under the ticker and
+  turns to follow the pointer; a "Scroll" cue leads to the hero, which now carries the id `intro`.
 - Files: src/index.src.html, index.html, build.py, assets/phones/*.webp, assets/fonts/Anton-Regular.woff2,
   assets/fonts/Anton-OFL.txt, assets/illustrations/*.svg, mockups/*.png, DESIGN.md, AGENTS.md,
   CONTRIBUTING.md, README.md, CHANGELOG.md

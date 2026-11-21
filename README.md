@@ -42,7 +42,8 @@ for example `{{FONT:fonts/Anton-Regular.woff2}}`).
 |---|---|---|
 | Coin ticker | `body > .tape` | Live-looking coin prices, pinned to the top of the screen. |
 | Menu bar | `.bar` | Floating at the bottom centre: logo, section links (or a menu button), and the start button, which becomes "My dashboard" once a user has launched. |
-| Hero | `.hero` | Headline, start button, and the trade chart: one illustrated trade with its entry, SL, TP and profit lock, and the four steps beneath. |
+| Face | `#face` | The opening screen: an ASCII portrait that turns to follow the pointer, and a Scroll cue to the hero. |
+| Hero | `.hero` (`#intro`) | Headline, start button, and the trade chart: one illustrated trade with its entry, SL, TP and profit lock, and the four steps beneath. |
 | What the bot does | `#bot` | The bot's market reading (Long/Short liquid pills), the trade log, and four key facts. |
 | On your phone | `#phone` | Four phone screens (plan, trade chart, Solana Pay, dashboard) from `assets/phones/`; a swipeable row on phones. |
 | Set up in four steps | `#setup` | A checkout: the current step (Plan, Connect with keys that can be skipped, Margin, Launch with the Risk Disclosure) beside a live "Your autopilot" receipt that holds the start button. |

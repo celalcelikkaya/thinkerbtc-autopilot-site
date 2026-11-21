@@ -101,6 +101,19 @@ body{padding-top:calc(var(--tick-h) + env(safe-area-inset-top,0px));padding-bott
 .btn.dark{background:var(--bg);color:var(--fg);box-shadow:inset 0 0 0 1px var(--line2)}.btn.dark .lbl,.btn.dark>svg{position:relative;color:var(--fg)}
 .btn.dark.full .lbl{color:var(--ink)}
 
+/* ---------- the face: an ASCII portrait that turns to follow the pointer. It opens the page, one screen tall under the
+   ticker; green characters on black, brightest where the light hits, over a soft green/red glow ---------- */
+.face{position:relative;height:calc(100svh - var(--tick-h) - env(safe-area-inset-top,0px));min-height:26rem;max-height:62rem;overflow:hidden;isolation:isolate}
+.face canvas{position:absolute;inset:0;width:100%;height:100%;display:block;animation:fade 1.4s var(--ease-out) both}
+.face>.glow{background:radial-gradient(34% 44% at 50% 48%,color-mix(in srgb,var(--up) 17%,transparent),transparent 72%),
+  radial-gradient(40% 50% at 8% 6%,color-mix(in srgb,var(--up) 14%,transparent),transparent 70%),
+  radial-gradient(42% 52% at 94% 94%,color-mix(in srgb,var(--down) 16%,transparent),transparent 70%);
+  -webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
+.face-cue{position:absolute;left:50%;bottom:calc(var(--bar-h) + 34px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:var(--tap);min-height:var(--tap);font:500 11.5px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--fg3);text-decoration:none;transition:color var(--t-ui)}
+.face-cue svg{width:18px;height:18px;animation:cue 2.6s var(--ease-out) infinite}
+@keyframes cue{50%{transform:translateY(3px)}}
+@media (hover:hover) and (pointer:fine){.face-cue:hover{color:var(--fg)}}
+
 /* ---------- hero: the headline, then the instrument ---------- */
 .hero{position:relative;padding-block:clamp(28px,4.5vh,56px) 0;overflow:hidden;isolation:isolate}
 /* market glow (hero, closing band): green light, the market going up, top left; red light, going down, bottom right;
@@ -612,7 +625,7 @@ body.inapp>header.bar,body.inapp>main,body.inapp>footer,body.inapp>.mcta,body.in
   .pane.on,.live.on,.rd-sh,.rd-p,.si-p,.qr.done::after{animation:fade .2s ease}
   .pm.acc.need{animation:none}
   .a-toast,.menu{transform:none!important}
-  .hero .label,.hero h1,.hero-c>*,.hero-art,.hero .desk,.blk .wrap>*,.final .fin{animation:none}
+  .hero .label,.hero h1,.hero-c>*,.hero-art,.hero .desk,.blk .wrap>*,.final .fin,.face canvas,.face-cue svg{animation:none}
   .menu.on,.a-toast,.a-toast.on{transition:opacity .2s ease,visibility 0s}
   .odo .col{transition:none}
   :is(.btn,.chip,.si-b,.ex,.st,.plan,.a-seg button,.a-res,.a-pause,.cnt button,.rd-x,.menu-b,.go):active{transform:none}
@@ -631,7 +644,10 @@ body.inapp>header.bar,body.inapp>main,body.inapp>footer,body.inapp>.mcta,body.in
 </header>
 
 <main id="top">
-<section class="hero"><div class="glow" aria-hidden="true"></div><div class="wrap">
+<div class="face" id="face"><div class="glow" aria-hidden="true"></div><canvas aria-hidden="true"></canvas>
+  <a class="face-cue" href="#intro"><span>Scroll</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
+</div>
+<section class="hero" id="intro"><div class="glow" aria-hidden="true"></div><div class="wrap">
   <div class="hero-head">
     <div class="hero-art" aria-hidden="true"><img class="art" src="{{IMG:illustrations/hero-trade-line.svg}}" alt="" width="640" height="440" decoding="async"></div>
     <div class="hero-t">
@@ -1041,6 +1057,36 @@ if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!STILL)document.query
     target=Math.max(0,Math.min(max(),target+(e.deltaMode===1?e.deltaY*40:e.deltaY)));if(!raf)raf=requestAnimationFrame(step)},{passive:false});
   addEventListener('scroll',()=>{if(!raf)y=target=scrollY},{passive:true});   /* keys, the scrollbar and anchor jumps move the page themselves */
 })();
+
+/* ───────── the face: an ASCII portrait drawn from a sculpted depth map, lit from the side; the light and a little
+   parallax follow the pointer anywhere on screen while the face is in view. Redraws only when the gaze moves. ───────── */
+(function(){const face=document.getElementById('face'),canvas=face&&face.querySelector('canvas'),ctx=canvas&&canvas.getContext('2d');if(!ctx)return;
+  const glyphs=' .,:;irsxA253hMHGS#9B&@',bump=(x,y,cx,cy,sx,sy)=>Math.exp(-(((x-cx)/sx)**2+((y-cy)/sy)**2));
+  function depth(x,y){const spread=.69-.17*bump(0,y,0,.64,1,.43),oval=(x/spread)**2+((y+.02)/1.01)**2;if(oval>=1)return 0;const side=Math.abs(x);
+    return .72*Math.sqrt(1-oval)+.096*bump(side,y,.31,-.35,.22,.11)-.133*bump(side,y,.31,-.22,.17,.145)+.05*bump(side,y,.32,-.20,.14,.055)+.14*bump(side,y,.37,.07,.23,.22)
+      +.30*bump(x,y,0,-.07,.105,.29)+.21*bump(x,y,0,.14,.16,.105)-.09*bump(side,y,.115,.2,.042,.029)+.055*bump(side,y,.076,.355,.10,.035)
+      -.075*bump(x,y,0,.402+.035*side,.25,.024)+.073*bump(x,y,0,.465,.20,.05)+.11*bump(x,y,0,.67,.24,.15)}
+  /* three inks from the theme: dim green for the shadows, green, and a pale mint where the light is strongest */
+  const hex=h=>{h=h.replace('#','');return[0,2,4].map(i=>parseInt(h.slice(i,i+2),16))},mix=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t));
+  let inks=[];function setInks(){const up=hex(css('--up')),ink=hex(css('--up-ink'));inks=['rgba('+up+',.42)','rgb('+ink+')','rgb('+mix(ink,[255,255,255],.6)+')']}
+  let W=0,H=0,scale=0,font='',samples=[],raf=0,aimX=0,aimY=0,gx=0,gy=0,vis=true;
+  function draw(){raf=0;gx+=(aimX-gx)*.1;gy+=(aimY-gy)*.1;ctx.clearRect(0,0,W,H);
+    const buckets=[[],[],[]];
+    for(const [l,t,nx,ny,nz,rel,tex] of samples){const light=nx*(-.54+.32*gx)+ny*(-.37+.25*gy)+nz*.7,shade=Math.max(0,Math.min(1,.78-light*.69+tex)),b=1-shade;   /* on black the light is the dense glyph */
+      const g=glyphs[Math.round(b*(glyphs.length-1))];if(g===' ')continue;buckets[b<.38?0:b<.72?1:2].push(g,l+gx*rel*scale*.18,t+gy*rel*scale*.12)}
+    buckets.forEach((q,k)=>{ctx.fillStyle=inks[k];for(let i=0;i<q.length;i+=3)ctx.fillText(q[i],q[i+1],q[i+2])});
+    if(Math.abs(aimX-gx)+Math.abs(aimY-gy)>.006)schedule()}
+  function schedule(){if(!raf)raf=requestAnimationFrame(draw)}
+  function resize(){const r=face.getBoundingClientRect();W=r.width;H=r.height;if(!W||!H)return;const dp=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(W*dp);canvas.height=Math.round(H*dp);ctx.setTransform(dp,0,0,dp,0,0);
+    scale=Math.min(W*.61,H*.38);const fs=Math.max(6,Math.min(10.5,scale/34));font='600 '+fs+'px "JetBrains Mono",ui-monospace,Menlo,monospace';ctx.font=font;ctx.textAlign='center';ctx.textBaseline='middle';setInks();
+    const sx=ctx.measureText('M').width,sy=fs*.93,ox=W/2,oy=H*.45;samples=[];
+    for(let row=-Math.ceil(scale/sy);row<=Math.ceil(scale/sy);row++)for(let col=-Math.ceil(scale*.72/sx);col<=Math.ceil(scale*.72/sx);col++){const x=col*sx/scale,y=row*sy/scale,rel=depth(x,y);if(rel<=0)continue;
+      const d=.008,dx=(depth(x-d,y)-depth(x+d,y))/(2*d),dy=(depth(x,y-d)-depth(x,y+d))/(2*d),len=Math.hypot(dx,dy,1);samples.push([ox+col*sx,oy+row*sy,dx/len,dy/len,1/len,rel,Math.sin(col*127.1+row*311.7)*.055])}
+    schedule()}
+  new IntersectionObserver(e=>{vis=e[0].isIntersecting}).observe(face);
+  if(!STILL){addEventListener('pointermove',e=>{if(!vis)return;const r=face.getBoundingClientRect();aimX=Math.max(-1.3,Math.min(1.3,(e.clientX-r.left)/r.width*2-1));aimY=Math.max(-1.3,Math.min(1.3,(e.clientY-r.top)/r.height*2-1));schedule()},{passive:true});
+    document.addEventListener('pointerleave',()=>{aimX=aimY=0;schedule()})}
+  new ResizeObserver(resize).observe(face);document.fonts&&document.fonts.ready.then(resize)})();
 
 /* ───────── hero phone: Long/Short pills with the app's behaviour, playing by themselves ───────── */
 const HL=liquid(document.getElementById('hl'),{color:'up',foam:true,rest:19}),HS=liquid(document.getElementById('hs'),{color:'down'});
