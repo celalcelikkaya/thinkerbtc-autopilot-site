@@ -186,6 +186,13 @@ dashboard's numbers) stays solid so it reads first. Never put glass on glass.
   pointer and keyboard pass the same sign-in, payment and Risk Disclosure checks.
 - Interface motion tokens: `--ease-out` `cubic-bezier(.23,1,.32,1)`, `--ease-drawer`
   `cubic-bezier(.32,.72,0,1)`, `--t-press` 160ms, `--t-ui` 200ms, `--t-panel` 350ms.
+- **Fluid scrolling.** A mouse wheel's notches are eased into one glide (`step()` in the fluid-scrolling script,
+  13% of the remaining distance per frame); trackpads and touch keep their native momentum, and anything that
+  scrolls on its own (dialogs, menu, reading sheet, compare table, phone row) is left alone. The hero arrives once on
+  load (`rise`, staggered 0–320ms on `--spring`). Section content (`.blk .wrap > *`, `.fin`) rises 40px and fades in
+  over its first 240px into view (`reveal`, a CSS scroll-driven animation on `view()`), so it tracks the scroll,
+  reverses when you scroll back and is never hidden at rest; browsers without scroll-driven animations show it
+  still. Reduced motion turns all three off.
 - Press feedback: buttons, chips, plan cards and steps scale to .97 while pressed (hold button .985).
   Hover effects only with a real pointer (`@media (hover:hover) and (pointer:fine)`).
 - No scroll-triggered fade-ins, no parallax.

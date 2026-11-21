@@ -61,6 +61,9 @@ Format:
   autopilot" receipt sits beside each step, filling in as you choose and showing what is due or paid. The
   hold-to-start button moved into the receipt and stays locked until the last step and the Risk Disclosure; the
   old four-box summary on the Launch step is gone. Headings no longer show a focus ring when a step opens.
+  Scrolling feels fluid: mouse-wheel notches glide as one smooth movement (trackpads and touch keep their own
+  momentum), the hero eases in once on load, and each section's content rises softly into place as it scrolls into
+  view, tied to the scroll so it never stays hidden. Reduced motion turns all of it off.
 - Files: src/index.src.html, index.html, build.py, assets/phones/*.webp, assets/fonts/Anton-Regular.woff2,
   assets/fonts/Anton-OFL.txt, assets/illustrations/*.svg, mockups/*.png, DESIGN.md, AGENTS.md,
   CONTRIBUTING.md, README.md, CHANGELOG.md

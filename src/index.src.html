@@ -589,6 +589,18 @@ body.inapp>header.bar,body.inapp>main,body.inapp>footer,body.inapp>.mcta,body.in
 @media (prefers-reduced-transparency:reduce){:root{--glass-tint:#181A1D;--glass-thick:#181A1D;--glass-strip:#08090A;--glass-fx:none}}
 @media (prefers-contrast:more){:root{--glass-tint:#181A1D;--glass-thick:#181A1D;--glass-strip:#08090A;--glass-fx:none;--glass-rim:linear-gradient(#868991,#868991);--glass-sheen:linear-gradient(transparent,transparent)}.nav{color:var(--fg)}}
 
+/* ---------- fluid scrolling: the hero arrives once on load; section content rises into place as it scrolls in.
+   The reveal is tied to the scroll position itself (CSS scroll-driven animation), so it follows the scroll exactly,
+   runs backwards when you scroll back, and never leaves anything hidden at rest. Browsers without it show it as before. ---------- */
+@keyframes rise{from{opacity:0;transform:translateY(22px)}}
+.hero .label,.hero h1,.hero-c>*,.hero-art,.hero .desk{animation:rise .9s var(--spring) both}
+.hero h1{animation-delay:.06s}.hero-art{animation-delay:.16s}.hero-c>.lead{animation-delay:.14s}.hero-c>.ctas{animation-delay:.2s}.hero-c>.trust{animation-delay:.26s}.hero .desk{animation-delay:.32s}
+@keyframes reveal{from{opacity:0;transform:translateY(40px) scale(.985)}}
+@supports (animation-timeline:view()){
+  .blk .wrap>*,.final .fin{animation:reveal linear both;animation-timeline:view();animation-range:entry 0% entry 240px}
+}
+@media print{*{animation:none!important}}
+
 /* touch screens: every control outside running text is at least --tap tall (kept last so it wins) */
 @media (pointer:coarse){.btn.sm,.chip,.a-res{height:var(--tap)}.inp .ic{width:var(--tap);height:var(--tap)}input[type=range]{height:var(--tap)}}
 
@@ -600,6 +612,7 @@ body.inapp>header.bar,body.inapp>main,body.inapp>footer,body.inapp>.mcta,body.in
   .pane.on,.live.on,.rd-sh,.rd-p,.si-p,.qr.done::after{animation:fade .2s ease}
   .pm.acc.need{animation:none}
   .a-toast,.menu{transform:none!important}
+  .hero .label,.hero h1,.hero-c>*,.hero-art,.hero .desk,.blk .wrap>*,.final .fin{animation:none}
   .menu.on,.a-toast,.a-toast.on{transition:opacity .2s ease,visibility 0s}
   .odo .col{transition:none}
   :is(.btn,.chip,.si-b,.ex,.st,.plan,.a-seg button,.a-res,.a-pause,.cnt button,.rd-x,.menu-b,.go):active{transform:none}
@@ -1013,6 +1026,21 @@ document.querySelectorAll('[data-hover]').forEach(el=>{const s=liquid(el,{color:
 if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!STILL)document.querySelectorAll('.bar>.wrap,.btn.ghost,.menu').forEach(el=>{
   el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect();el.style.setProperty('--gx',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');el.style.setProperty('--gy',((e.clientY-r.top)/r.height*100).toFixed(1)+'%')});
   el.addEventListener('pointerleave',()=>{el.style.removeProperty('--gx');el.style.removeProperty('--gy')})});
+
+/* fluid scrolling: a mouse wheel's notches are eased into one glide. Trackpads and touch keep their own native momentum,
+   and anything that scrolls on its own (dialogs, the menu, the reading sheet, the compare table) is left alone. */
+(function(){if(STILL||!matchMedia('(hover:hover) and (pointer:fine)').matches)return;
+  let y=scrollY,target=scrollY,raf=0;
+  const max=()=>document.documentElement.scrollHeight-innerHeight;
+  const ownScroll=el=>{for(;el&&el!==document.body&&el!==document.documentElement;el=el.parentElement){const o=getComputedStyle(el).overflowY;if((o==='auto'||o==='scroll')&&el.scrollHeight>el.clientHeight+1)return true}return false};
+  function step(){y+=(target-y)*.13;if(Math.abs(target-y)<.5)y=target;scrollTo({top:y,behavior:'instant'});raf=y!==target?requestAnimationFrame(step):0}
+  addEventListener('wheel',e=>{
+    const notched=e.deltaMode===1||(e.deltaX===0&&Number.isInteger(e.deltaY)&&Math.abs(e.deltaY)>=50);   /* a mouse wheel, not a trackpad */
+    if(!notched||e.ctrlKey||e.shiftKey||e.defaultPrevented||document.body.classList.contains('rdopen')||e.target.closest('[role=dialog],.menu,.cmpw,.phones')||ownScroll(e.target))return;
+    e.preventDefault();if(!raf){y=target=scrollY}
+    target=Math.max(0,Math.min(max(),target+(e.deltaMode===1?e.deltaY*40:e.deltaY)));if(!raf)raf=requestAnimationFrame(step)},{passive:false});
+  addEventListener('scroll',()=>{if(!raf)y=target=scrollY},{passive:true});   /* keys, the scrollbar and anchor jumps move the page themselves */
+})();
 
 /* ───────── hero phone: Long/Short pills with the app's behaviour, playing by themselves ───────── */
 const HL=liquid(document.getElementById('hl'),{color:'up',foam:true,rest:19}),HS=liquid(document.getElementById('hs'),{color:'down'});
