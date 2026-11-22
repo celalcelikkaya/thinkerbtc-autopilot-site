@@ -66,7 +66,7 @@ Rules:
 | Numbers, prices, tickers, codes | JetBrains Mono | 500–700 + `tabular-nums` | `--f-mono` |
 
 Anton (Vernon Adams, SIL Open Font License, `assets/fonts/Anton-OFL.txt`) is embedded in the page from
-`assets/fonts/Anton-Regular.woff2`, a Latin subset (16 KB) built into the page with `{{FONT:path}}`. Display rules set
+`assets/fonts/Anton-Regular.woff2`, a Latin subset (18 KB, unhinted, cut from the OTF, with the Turkish İ Ş Ğ added) built into the page with `{{FONT:path}}`. Display rules set
 `font-synthesis: none` so the browser never fakes a bold. If a headline needs a character outside the subset,
 re-subset from the full font. Text uses the platform's own font, as Apple advises: it ships optical sizing and
 tracking, and nothing has to load. JetBrains Mono (`500;600;700`) loads from Google Fonts.
@@ -138,7 +138,16 @@ dashboard's numbers) stays solid so it reads first. Never put glass on glass.
   surface; a little ambient light keeps the shadow side visible. The light and a little parallax follow the pointer
   anywhere on screen while it is in view; it redraws only while the gaze moves. Behind him, "AUTOPILOT" in Anton
   (`.face-word`, up to 20rem, a silver gradient from 20% to 5% white): the head paints its own cells in `--bg` first,
-  so it truly covers the word, and the word drifts a little against the pointer for depth. From 1024px it sits at eye
+  so it truly covers the word. The word stays still and centred (it no longer drifts with the pointer). Every 2.8s the word changes
+  language (English, Spanish, Japanese, French, Russian, Turkish, Arabic, Chinese, Hindi, German, Korean, Italian): it
+  fades and blurs out, the next settles in, and a long one is scaled down to fit. Each word is measured on a
+  canvas and offset (`--dx`, `--dy`) so its letters sit on the exact centre: Latin and Cyrillic centre on their
+  capitals, so accents never move a word; other scripts centre on their ink, with one named font per script so the
+  page draws what was measured. The word box has .25em of padding so the clipped gradient never cuts off marks above
+  or below the line. Latin words stay in Anton; Russian
+  uses Impact, the nearest system face; Japanese, Arabic, Chinese, Hindi and Korean use the heaviest system face for
+  their script (`.alt`). Each word carries its own `lang` (so Turkish capitalises to OTOPİLOT) and Arabic runs
+  right to left. It pauses off screen and in a hidden tab, and stays on "Autopilot" with reduced motion. From 1024px it sits at eye
   level, poster style; on tablets and phones, where the head would hide it, it moves up above the crown. A soft
   green/red glow sits behind it
   and a quiet "Scroll" cue links to the hero (`#intro`). Reduced motion keeps it still. It is an original design, not a
@@ -192,6 +201,11 @@ dashboard's numbers) stays solid so it reads first. Never put glass on glass.
   a tinted card, the four others in a 2x2 grid, every cell naming its company (`data-k`); ARIA table roles keep it a
   table for screen readers. "Only on ThinkerBTC" follows as a ruled row of three green ticks (`.only`), and the
   sources line sits under it.
+- **Subscriber pool** `.pool`: no card. The real count is set huge in Anton (rolling digits), with the message, the
+  "Live" dot (only once the server answers) and the next milestone on the right. Below it an open tank (`.pool-bar`,
+  96–148px tall) fills with the green liquid as count / next milestone, over a ruler marked 0, half and the milestone.
+  At 0 the liquid rests on a sliver kept wider than the tank's rounded end. A ruled "Milestones" row (`.ms`) lists the
+  next five: reached ones carry a green tick, the next one is outlined green. Only the real count is ever shown.
 - **FAQ**: two ruled columns of `details`, green `+` that turns to `×`.
 - **Section menu** `.menu-b` + `.menu` (below 1280px): the 44px button in the pill opens a panel upward,
   above the bar, with large links and the start button; the page dims behind it.

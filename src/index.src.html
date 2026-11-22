@@ -111,11 +111,24 @@ body{padding-top:calc(var(--tick-h) + env(safe-area-inset-top,0px));padding-bott
   radial-gradient(42% 52% at 94% 94%,color-mix(in srgb,var(--down) 16%,transparent),transparent 70%);
   -webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
 /* the word behind him: poster type the head covers; it drifts a little against the pointer for depth */
-.face-word{position:absolute;left:0;right:0;top:45%;margin:0;transform:translateY(-50%);text-align:center;white-space:nowrap;pointer-events:none;user-select:none;
+.face-word{position:absolute;left:0;right:0;top:45%;height:.82em;margin:0;transform:translateY(-50%);text-align:center;white-space:nowrap;pointer-events:none;user-select:none;
   font:400 min(23vw,20rem)/.82 var(--f-display);font-synthesis:none;letter-spacing:.005em;text-transform:uppercase;color:transparent;
-  background:linear-gradient(180deg,rgba(237,238,240,.20),rgba(237,238,240,.05) 78%);-webkit-background-clip:text;background-clip:text;animation:fade 1.6s var(--ease-out) both}
+  animation:fade 1.6s var(--ease-out) both}
 @media (min-width:601px) and (max-width:1023px){.face-word{top:11%}}
 @media (max-width:600px){.face-word{top:22%;font-size:24vw}}   /* phones: the head would hide it, so it sits above, just touching the crown */
+/* the word changes language: each one fades and blurs out, the next settles in, scaled down only if it would not fit.
+   Anton has Latin only, so other scripts use the heaviest system face for them. */
+.face-word span{position:absolute;left:50%;top:50%;display:block;line-height:1;padding:.25em .05em;white-space:nowrap;
+  background:linear-gradient(180deg,rgba(237,238,240,.20) 18%,rgba(237,238,240,.05) 66%);-webkit-background-clip:text;background-clip:text;   /* the silver fill lives on the word itself: Chrome clips a parent's fill to where the text was before it is moved */
+  transform:translate(calc(-50% + var(--dx,0px)),calc(-50% + var(--dy,0px)));transition:opacity .5s var(--ease-out),filter .5s var(--ease-out)}   /* --dx/--dy put the letters themselves, not the font's box, on the centre; the padding gives the clipped gradient room for marks above and below the line (Arabic, Devanagari, accents) */
+.face-word span.out{opacity:0;filter:blur(10px)}
+.face-word span.cyr{font-family:Impact,"Haettenschweiler","Arial Narrow",var(--f-display);font-weight:400;letter-spacing:.01em}   /* Cyrillic: Impact is the nearest system face to Anton */
+.face-word span.alt{font-weight:900;letter-spacing:-.01em}
+.face-word span[lang=ja]{font-family:"Hiragino Sans","Noto Sans CJK JP","Yu Gothic",system-ui,sans-serif}
+.face-word span[lang=zh]{font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",system-ui,sans-serif}
+.face-word span[lang=ko]{font-family:"Apple SD Gothic Neo","Noto Sans CJK KR","Malgun Gothic",system-ui,sans-serif}
+.face-word span[lang=hi]{font-family:"Kohinoor Devanagari","Noto Sans Devanagari","Nirmala UI",system-ui,sans-serif;font-weight:700}
+.face-word span[lang=ar]{font-family:"Geeza Pro","Noto Sans Arabic","Segoe UI",system-ui,sans-serif;font-weight:700}   /* one named face per script, so the canvas measures the same font the page draws */
 .face-cue{position:absolute;left:50%;bottom:calc(var(--bar-h) + 34px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:var(--tap);min-height:var(--tap);font:500 11.5px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--fg3);text-decoration:none;transition:color var(--t-ui)}
 .face-cue svg{width:18px;height:18px;animation:cue 2.6s var(--ease-out) infinite}
 @keyframes cue{50%{transform:translateY(3px)}}
@@ -490,22 +503,38 @@ body.rdopen{overflow:hidden}
   .only .label,.only ul{grid-column:1/-1}.only ul{grid-template-columns:1fr;gap:14px}
 }
 
-/* ---------- subscriber pool ---------- */
+/* ---------- subscriber pool ----------
+   No card: the count set huge on the page, an open tank of liquid that fills toward the next milestone, a ruler under it,
+   and a ladder of milestones. Only the real count is ever shown; at 0 the tank rests on a sliver and invites the first. */
 .odo{display:inline-flex;vertical-align:top;height:1em;line-height:1;overflow:hidden}
 .odo .col{display:flex;flex-direction:column;transition:transform .9s cubic-bezier(.2,1.25,.35,1)}
 .odo .col span,.odo>span{height:1em;display:block}
-.pool{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:18px 24px;padding:24px clamp(20px,4vw,32px) clamp(20px,3vw,28px);border-radius:var(--r-panel);background:var(--card);box-shadow:inset 0 0 0 1px var(--line);cursor:default}
-.pool .lbl{display:flex;flex-direction:column;gap:6px}
-.pool-k,.pool-r span{font:600 12px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--fg2)}
-.pool-n{font:700 clamp(44px,7vw,76px)/1 var(--f-mono);letter-spacing:-.04em}
-.pool-l small{font-size:14px;color:var(--fg2);font-weight:600}
-.pool-r{text-align:right;align-items:flex-end}
-.pool-r b{font:700 clamp(22px,3vw,30px) var(--f-mono)}
-.pool-live{visibility:hidden;display:inline-flex;align-items:center;gap:7px;font:700 12px var(--f-body);letter-spacing:.06em;color:var(--up-ink)}
+.pool{cursor:default}
+.pool-top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px 32px;flex-wrap:wrap;margin-bottom:22px}
+.pool-l{display:flex;flex-direction:column;gap:10px}
+.pool-n{font:400 clamp(96px,13vw,200px)/1 var(--f-display);font-synthesis:none;letter-spacing:.01em;color:var(--fg);font-variant-numeric:tabular-nums}
+.pool-r{display:flex;flex-direction:column;align-items:flex-end;gap:8px;text-align:right;padding-bottom:10px}
+.pool-msg{font-size:clamp(18px,1.7vw,22px);font-weight:600;color:var(--fg);text-wrap:balance}
+.pool-next{font:500 13px var(--f-mono);color:var(--fg2)}.pool-next b{color:var(--fg);font-weight:700}
+.pool-live{visibility:hidden;display:inline-flex;align-items:center;gap:7px;font:600 12px var(--f-mono);letter-spacing:.06em;color:var(--up-ink)}
 .pool.synced .pool-live{visibility:visible}
 .pool-live i{width:8px;height:8px;border-radius:50%;background:currentColor;animation:pulse 1.8s infinite}
-.pool-bar{grid-column:1/-1;height:52px;border-radius:var(--r-ctl);background:var(--bg2);box-shadow:inset 0 0 0 1px var(--line);cursor:default}   /* the gauge: count / next milestone */
-@media (max-width:560px){.pool{grid-template-columns:1fr}.pool-r{text-align:left;align-items:flex-start}}
+.pool-bar{display:block;height:clamp(96px,10vw,148px);border-radius:var(--r-panel);background:var(--bg2);box-shadow:inset 0 0 0 1px var(--line);cursor:default}   /* the tank: count / next milestone */
+.pool-bar::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),inset 0 0 0 1px var(--line)}
+.pool-ruler{position:relative;height:30px;margin:0 2px;background:linear-gradient(90deg,var(--line2) 1px,transparent 1px) 0 0/10% 7px repeat-x}
+.pool-ruler::before{content:"";position:absolute;right:0;top:0;width:1px;height:7px;background:var(--line2)}
+.pool-ruler span{position:absolute;top:12px;font:500 12px/1 var(--f-mono);color:var(--fg3)}
+.pool-ruler span:nth-child(2){left:50%;transform:translateX(-50%)}.pool-ruler span:last-child{right:0;color:var(--fg2)}
+.ms{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:16px;align-items:center;margin-top:30px;padding-top:26px;border-top:1px solid var(--line)}
+.ms .label{grid-column:1/span 3}
+.ms ol{grid-column:4/-1;display:flex;flex-wrap:wrap;gap:10px;margin:0;padding:0;list-style:none}
+.ms li{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--line);font:600 14px var(--f-mono);color:var(--fg3)}
+.ms li svg{width:16px;height:16px;color:var(--acc)}
+.ms li.done{color:var(--fg);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--acc) 30%,var(--line))}
+.ms li.next{color:var(--fg);background:color-mix(in srgb,var(--acc) 9%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--acc) 60%,transparent)}
+.ms li.next small{font:600 10.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--acc-ink)}
+@media (max-width:1023px){.ms .label,.ms ol{grid-column:1/-1}}
+@media (max-width:560px){.pool-r{align-items:flex-start;text-align:left;padding-bottom:0}.pool-top{margin-bottom:18px}.ms li{height:36px;padding:0 13px;font-size:13px}}
 
 /* ---------- questions ---------- */
 .faq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:40px;align-items:start}
@@ -709,7 +738,7 @@ body.inapp>header.bar,body.inapp>main,body.inapp>footer,body.inapp>.mcta,body.in
 </header>
 
 <main id="top">
-<div class="face" id="face"><div class="glow" aria-hidden="true"></div><p class="face-word" aria-hidden="true">Autopilot</p><canvas aria-hidden="true"></canvas>
+<div class="face" id="face"><div class="glow" aria-hidden="true"></div><p class="face-word" aria-hidden="true"><span lang="en">Autopilot</span></p><canvas aria-hidden="true"></canvas>
   <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateT" aria-describedby="gateD">
     <p class="label gate-l" id="gateT">Before you enter</p>
     <p class="gate-d" id="gateD">ThinkerBTC trades leveraged Binance futures for you. Leveraged futures can lose money fast, including your whole margin. <a href="#" class="rdl">Read the Risk Disclosure</a></p>
@@ -902,10 +931,14 @@ body.inapp>header.bar,body.inapp>main,body.inapp>footer,body.inapp>.mcta,body.in
 <section class="blk" id="members"><div class="wrap">
   <header class="sh"><p class="label">Subscribers</p><div class="sh-c"><h2>The pool is filling up.</h2><p>Every new ThinkerBTC subscriber pours into the pool below. It updates on its own the moment someone joins.</p></div></header>
   <div class="pool" id="pool" role="img" aria-label="Subscriber count">
-    <div class="pool-l lbl"><span class="pool-k" id="poolk">Subscribers</span><b class="pool-n"><span class="odo" id="pooln"></span></b><small id="poolmsg">Be one of the first</small></div>
-    <div class="pool-r lbl"><span>Next milestone</span><b class="mono" id="poolgoal">100</b><small class="pool-live"><i></i>Live</small></div>
+    <div class="pool-top">
+      <div class="pool-l"><b class="pool-n"><span class="odo" id="pooln"></span></b></div>
+      <div class="pool-r"><small class="pool-live"><i></i>Live</small><small class="pool-msg" id="poolmsg">Be one of the first</small><span class="pool-next">Next milestone <b id="poolgoal">100</b></span></div>
+    </div>
     <div class="pool-bar lp" id="poolbar" aria-hidden="true"></div>
+    <div class="pool-ruler" aria-hidden="true"><span>0</span><span id="poolhalf">50</span><span id="poolend">100</span></div>
   </div>
+  <div class="ms"><p class="label">Milestones</p><ol id="poolms"></ol></div>
 </div></section>
 
 <section class="blk" id="faq"><div class="wrap">
@@ -1178,9 +1211,8 @@ function glow(x,y){return eyeMask(x,y)}
   const glyphs=' .,:-=+*#%@';   /* a smooth ramp, so each plate reads as one surface */
   const hex=h=>{h=h.replace('#','');return[0,2,4].map(i=>parseInt(h.slice(i,i+2),16))},mix=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t));
   let inks=[],eyeInk='',eyeGlow='';function setInks(){const up=hex(css('--up')),ink=hex(css('--up-ink'));inks=['rgba('+up+',.42)','rgb('+ink+')','rgb('+mix(ink,[255,255,255],.6)+')'];eyeInk='rgb('+mix(ink,[255,255,255],.92)+')';eyeGlow='rgba('+ink+',.95)'}
-  const word=face.querySelector('.face-word');let W=0,H=0,scale=0,cw=0,ch=0,bg='#08090A',samples=[],eyes=[],raf=0,aimX=0,aimY=0,gx=0,gy=0,vis=true;
+  let W=0,H=0,scale=0,cw=0,ch=0,bg='#08090A',samples=[],eyes=[],raf=0,aimX=0,aimY=0,gx=0,gy=0,vis=true;
   function draw(){raf=0;gx+=(aimX-gx)*.1;gy+=(aimY-gy)*.1;ctx.clearRect(0,0,W,H);
-    if(word)word.style.transform='translate('+(-gx*16).toFixed(1)+'px,calc(-50% + '+(-gy*10).toFixed(1)+'px))';   /* the word drifts against the head */
     ctx.fillStyle=bg;for(const s of samples)ctx.fillRect(s[0]+gx*s[5]*scale*.18-cw/2,s[1]+gy*s[5]*scale*.12-ch/2,cw+.6,ch+.6);for(const e of eyes)ctx.fillRect(e[0]+gx*e[2]*scale*.18-cw/2,e[1]+gy*e[2]*scale*.12-ch/2,cw+.6,ch+.6);   /* the head covers the word */
     const q=[[],[],[]];
     for(const [l,t,nx,ny,nz,rel,tex] of samples){const light=nx*(-.54+.32*gx)+ny*(-.37+.25*gy)+nz*.7,shade=Math.max(0,Math.min(1,.9-light*.95+tex)),b=.2+.8*(1-shade);   /* a little ambient keeps the shadow side visible */
@@ -1203,6 +1235,26 @@ function glow(x,y){return eyeMask(x,y)}
   if(!STILL){addEventListener('pointermove',e=>{if(!vis)return;const r=face.getBoundingClientRect();aimX=Math.max(-1.3,Math.min(1.3,(e.clientX-r.left)/r.width*2-1));aimY=Math.max(-1.3,Math.min(1.3,(e.clientY-r.top)/r.height*2-1));schedule()},{passive:true});
     document.addEventListener('pointerleave',()=>{aimX=aimY=0;schedule()})}
   new ResizeObserver(resize).observe(face);document.fonts&&document.fonts.ready.then(resize)})();
+/* the word behind him cycles through languages (decorative, aria-hidden). Each word is measured on a canvas and placed so
+   the middle of its letters (for Latin and Cyrillic, of its capitals) sits on the centre, whatever the font's own spacing; long ones are scaled down to fit.
+   It pauses off screen and in a hidden tab, and stays on "Autopilot" with reduced motion.
+   1 = CJK, Arabic, Devanagari (heavy system face), 2 = Cyrillic (Impact). */
+(function(){const p=document.querySelector('.face-word'),w=p&&p.firstElementChild;if(!w)return;
+  const L=[['en','Autopilot'],['es','Piloto automático'],['ja','オートパイロット',1],['fr','Pilote automatique'],['ru','Автопилот',2],['tr','Otopilot'],
+    ['ar','الطيار الآلي',1],['zh','自动驾驶',1],['hi','ऑटोपायलट',1],['de','Autopilot'],['ko','자동조종',1],['it','Pilota automatico']];
+  const cx=document.createElement('canvas').getContext('2d');let i=0,vis=true;
+  function place(){w.style.fontSize='';w.style.setProperty('--dx','0px');w.style.setProperty('--dy','0px');
+    const cs=getComputedStyle(w),fs=parseFloat(cs.fontSize);cx.font=cs.fontWeight+' '+fs+'px '+cs.fontFamily;cx.direction=w.dir==='rtl'?'rtl':'ltr';cx.textAlign='center';cx.textBaseline='alphabetic';
+    const m=cx.measureText(w.textContent.toLocaleUpperCase(w.lang||'en')),ink=m.actualBoundingBoxLeft+m.actualBoundingBoxRight,max=p.clientWidth*.92,k=ink>max?max/ink:1;
+    const mk=document.createElement('i');mk.style.cssText='display:inline-block;width:0;height:0';w.appendChild(mk);const base=mk.offsetTop;mk.remove();   /* where the page really puts the baseline in the box */
+    const cap=w.classList.contains('alt')?null:cx.measureText('H').actualBoundingBoxAscent;   /* Latin and Cyrillic centre on the capitals, so accents and dots don't move a word */
+    const dx=-(m.actualBoundingBoxRight-m.actualBoundingBoxLeft)/2,dy=w.offsetHeight/2-(cap?base-cap/2:base+(m.actualBoundingBoxDescent-m.actualBoundingBoxAscent)/2);
+    if(k<1)w.style.fontSize=k+'em';w.style.setProperty('--dx',(dx*k).toFixed(1)+'px');w.style.setProperty('--dy',(dy*k).toFixed(1)+'px')}
+  function next(){if(!vis||document.hidden)return;w.classList.add('out');
+    setTimeout(()=>{i=(i+1)%L.length;const[l,t,alt]=L[i];w.lang=l;w.dir=l==='ar'?'rtl':'ltr';w.textContent=t;w.classList.toggle('alt',alt===1);w.classList.toggle('cyr',alt===2);place();
+      requestAnimationFrame(()=>w.classList.remove('out'))},520)}
+  place();addEventListener('resize',place);document.fonts&&document.fonts.ready.then(place);
+  if(STILL)return;new IntersectionObserver(e=>{vis=e[0].isIntersecting}).observe(p);setInterval(next,2800)})();
 
 /* ───────── the gate: until you accept, only the robot and the gate can be reached (the rest is inert and the page does
    not scroll). Accepting folds the gate away and opens the menu bar out of the button; remembered for this session. ───────── */
@@ -1544,9 +1596,12 @@ function odo(el,str){const old=el.dataset.v||'';el.dataset.v=str;if(old.length!=
    rolls the number. Until the endpoint exists the pool rests at a low level and invites the first subscribers.
    Never put a made-up number here. ───────── */
 (function(){const STATS_URL='/api/public/stats',el=document.getElementById('pool'),n=document.getElementById('pooln'),msg=document.getElementById('poolmsg'),goal=document.getElementById('poolgoal');
-  const s=liquid(document.getElementById('poolbar'),{color:'gold',foam:true,rest:2,speed:1600});s.restCoins=true;s.dens=1.6;let count=null;   /* the gauge shows count / next milestone; 0 reads as empty */
+  const s=liquid(document.getElementById('poolbar'),{color:'gold',foam:true,rest:4,speed:1600});s.restCoins=true;s.dens=1.6;let count=null;
+  const bar=document.getElementById('poolbar'),fit=()=>{s.rest=Math.max(4,52/Math.max(1,bar.clientWidth)*100);if(count!==null){s.target=Math.max(s.rest,s.target);kick()}};fit();addEventListener('resize',fit);   /* the resting sliver stays wider than the tank's rounded end */   /* the gauge shows count / next milestone; 0 reads as empty */
   const MS=[100,250,500,1000,2500,5000,10000,25000,50000,100000];
   function show(c,first){const g=MS.find(m=>m>c)||Math.ceil((c+1)/100000)*100000;goal.textContent=g.toLocaleString('en-US');el.setAttribute('aria-label','Subscribers: '+c.toLocaleString('en-US')+'. Next milestone: '+g.toLocaleString('en-US'));
+    const f=x=>x.toLocaleString('en-US'),i=MS.indexOf(g),k=Math.max(0,i-1);document.getElementById('poolhalf').textContent=f(g/2);document.getElementById('poolend').textContent=f(g);
+    document.getElementById('poolms').innerHTML=(i<0?[g]:MS.slice(k,k+5)).map(m=>m<=c?`<li class="done"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.4l2.8 2.8 6-6.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>${f(m)}<span class="vh">reached</span></li>`:m===g?`<li class="next">${f(m)}<small>Next</small></li>`:`<li>${f(m)}</li>`).join('');
     odo(n,c.toLocaleString('en-US'));msg.textContent=c===0?'Be one of the first':c===1?'1 trader runs on autopilot':c.toLocaleString('en-US')+' traders run on autopilot';
     s.target=Math.max(s.rest,Math.min(100,c/g*100));if(!first){s.speed=1600;burst(s,now());el.animate&&el.animate([{transform:'scale(1)'},{transform:'scale(1.012)'},{transform:'scale(1)'}],{duration:600})}kick()}
   async function sync(){try{const r=await fetch(STATS_URL,{cache:'no-store'});if(!r.ok)throw 0;const d=await r.json();const c=Math.max(0,Math.floor(+d.subscribers||0));

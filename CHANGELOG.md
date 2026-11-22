@@ -69,7 +69,7 @@ Format:
   turns to follow the pointer; a "Scroll" cue leads to the hero, which now carries the id `intro`. Its head was
   rebuilt as an original android: armour plates with seams and a crest, slanted eye slits that glow, a vent grille,
   sensor discs, a segmented neck and plated shoulders. "AUTOPILOT" stands behind him in huge silver Anton, covered by
-  his head like a film poster and drifting slightly against the pointer; on tablets and phones it sits above his head.
+  his head like a film poster; on tablets and phones it sits above his head.
   The site now opens on the android alone, with no menu bar and no scrolling, behind a short gate: what ThinkerBTC
   does, the risk line and a link to the Risk Disclosure, and an "Accept and enter" button. Accepting opens the menu
   bar out of the button, brings in Start autopilot and the Scroll cue, and unlocks the page; the choice is remembered
@@ -78,6 +78,14 @@ Format:
   ThinkerBTC as one raised green lane, lined up under the heading, against four quiet columns, and "Only on
   ThinkerBTC" became a row of three green ticks. On tablets and phones it no longer scrolls sideways: each question
   is a block with ThinkerBTC's answer on a green card and the four others in a 2x2 grid, each naming its company.
+  "Subscribers" is redesigned: the card is gone; the real count stands huge in Anton beside its message and the next
+  milestone, an open green tank fills toward that milestone over a ruler, and a row of milestones ticks off the ones
+  reached and outlines the next. It still shows only the real count from the server and rests at 0 until then.
+  The word behind the android now cycles through twelve languages (English, Spanish, Japanese, French, Russian,
+  Turkish, Arabic, Chinese, Hindi, German, Korean, Italian), fading from one to the next every few seconds and
+  scaled to fit and held on the exact centre of the screen (it no longer drifts with the pointer); Latin words stay in
+  Anton, other scripts use the nearest heavy system face, and marks above and below the line are no longer cut off.
+  It stays on "Autopilot" with reduced motion. The Anton subset gains the Turkish İ, Ş and Ğ.
 - Files: src/index.src.html, index.html, build.py, assets/phones/*.webp, assets/fonts/Anton-Regular.woff2,
   assets/fonts/Anton-OFL.txt, assets/illustrations/*.svg, mockups/*.png, DESIGN.md, AGENTS.md,
   CONTRIBUTING.md, README.md, CHANGELOG.md
