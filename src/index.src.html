@@ -21,6 +21,7 @@
   --gold:#F7931A;--gold2:#FFA940;--gold-ink:#B8640C;--ink:#1B1300;--blue:#0052FF;--up:#089981;--down:#F23645;
   --glow:rgba(247,147,26,.16);--shadow:0 26px 50px -30px rgba(30,40,90,.35);color-scheme:light}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
@@ -231,7 +232,7 @@ input[type=range]::-moz-range-thumb{width:28px;height:28px;border:0;border-radiu
 @media (max-width:900px){.run{grid-template-columns:1fr}}
 .run-chart{background:var(--card);border-radius:28px;padding:18px 18px 10px;box-shadow:0 0 0 1px var(--line),var(--shadow);min-width:0}
 .rc-top{display:flex;justify-content:space-between;align-items:center;padding:2px 4px 10px}
-.rc-top .sym{display:flex;align-items:center;gap:10px}.rc-top img{width:28px;height:28px}.rc-top b{font:800 16px var(--f-display)}.rc-top small{color:var(--fg3);font-size:12px;margin-left:4px}
+.rc-top .sym{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.rc-ex{font:600 11px/1 var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--gold-ink);background:var(--card2);border-radius:999px;padding:5px 9px}.rc-top img{width:28px;height:28px}.rc-top b{font:800 16px var(--f-display)}.rc-top small{color:var(--fg3);font-size:12px;margin-left:4px}
 .rc-pnl{font-size:20px;font-weight:700;color:var(--fg2);transition:color .3s}.rc-pnl.u{color:var(--up)}.rc-pnl.d{color:var(--down)}
 #runc{display:block;width:100%;height:330px}
 @media (max-width:560px){#runc{height:260px}}
@@ -394,6 +395,9 @@ body.inapp>header.bar,body.inapp>main,body.inapp>footer,body.inapp>.mcta{display
 .a-empty{text-align:center;color:var(--fg2);padding:26px 10px 22px;font-size:14.5px}
 .a-empty b{display:block;color:var(--fg);font-size:16px;margin-bottom:4px}
 .a-empty .scan{margin:14px 0 0}
+.a-next .a-next-r{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}.a-next .a-next-r:first-of-type{border-top:0}
+.a-next .n{flex:none;width:26px;height:26px;border-radius:999px;background:var(--card2);color:var(--fg2);display:grid;place-items:center;font-size:12px;font-weight:700}
+.a-next b{display:block;font-size:14.5px;color:var(--fg)}.a-next .a-next-r span:not(.n){display:block;font-size:13px;color:var(--fg2);margin-top:2px}
 .a-h2{font:900 clamp(26px,5vw,32px) var(--f-body);letter-spacing:-.02em;margin:6px 0 2px}
 .a-sub{color:var(--fg2);margin:0 0 14px;font-size:14px}
 .a-kv{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-top:1px solid var(--line);font-size:15px}
@@ -461,7 +465,7 @@ footer p{max-width:70em;margin:0}
 
 <header class="bar"><div class="wrap">
   <a class="brand" href="#top"><img src="{{LOGO}}" alt=""><b>THINKER<span>BTC</span></b></a>
-  <nav class="nav"><a href="#bot">What the bot does</a><a href="#setup">Get started</a><a href="#compare">Compare</a><a href="#members">Subscribers</a><a href="#plans-anchor">Plans</a><a href="#faq">Questions</a><a href="#dashboard" class="nav-dash">My dashboard</a></nav>
+  <nav class="nav"><a href="#bot">What the bot does</a><a href="#setup">Get started</a><a href="#compare">Compare</a><a href="#members" id="navMembers" hidden>Subscribers</a><a href="#plans-anchor">Plans</a><a href="#faq">Questions</a><a href="#dashboard" class="nav-dash">My dashboard</a></nav>
   <a class="btn gold sm lp cta-s" href="#setup" data-hover><span class="lbl">Start autopilot</span></a>
 </div></header>
 
@@ -504,7 +508,7 @@ footer p{max-width:70em;margin:0}
 <section class="blk" id="bot"><div class="wrap">
   <div class="sh"><div class="eyebrow">What the bot does</div><h2>It trades like a careful person who never sleeps.</h2><p>Every position follows the same four moves, from the first signal to the money landing back in your wallet.</p></div>
   <div class="run">
-    <div class="run-chart"><div class="rc-top"><span class="sym"><img src="{{COIN:SOL}}" alt=""><b>SOL/USDT</b><small>15m · Long · 10×</small></span><span class="rc-pnl mono" id="rcp">+0.00%</span></div><canvas id="runc"></canvas></div>
+    <div class="run-chart"><div class="rc-top"><span class="sym"><img src="{{COIN:SOL}}" alt=""><b>SOL/USDT</b><small>15m · Long · 10×</small><span class="rc-ex">Example trade</span></span><span class="rc-pnl mono" id="rcp">+0.00%</span></div><canvas id="runc"></canvas></div>
     <ol class="run-steps" id="rsteps">
       <li><span class="n">1</span><div><b>Finds the setup</b><p>Trend, momentum and volatility on every pair. It enters only when the score clears its bar.</p></div></li>
       <li><span class="n">2</span><div><b>Puts SL and TP on Binance</b><p>Both orders sit on the exchange itself, so they hold even when your phone is off.</p></div></li>
@@ -641,7 +645,7 @@ footer p{max-width:70em;margin:0}
   <p class="src">Competitor prices are monthly list prices from each company's own pricing page, checked on 20 November 2026; sales and yearly plans can be lower. Pionex runs its bots on its own exchange and charges trading fees instead of a subscription.</p>
 </div></section>
 
-<section class="blk" id="members"><div class="wrap">
+<section class="blk" id="members" hidden><div class="wrap">
   <div class="sh"><div class="eyebrow">Subscribers</div><h2>The pool is filling up.</h2><p>Every new ThinkerBTC subscriber pours into the pool below. It updates on its own the moment someone joins.</p></div>
   <div class="pool lp" id="pool" role="img" aria-label="Subscriber count">
     <div class="pool-l lbl"><span class="pool-k" id="poolk">Subscribers</span><b class="pool-n"><span class="odo" id="pooln"></span></b><small id="poolmsg">Be one of the first</small></div>
@@ -842,17 +846,17 @@ const now=()=>performance.now();
 [['heroField',.5,2],['finField',.9,2.2]].forEach(([id,op,dens])=>{const s=liquid(document.getElementById(id),{color:'gold'});s.ghost=true;s.glass='white';s.restCoins=true;s.dens=dens;s.p=s.target=s.rest=100;s.c.style.opacity=op});
 
 /* hover buttons fill with gold liquid */
-document.querySelectorAll('[data-hover]').forEach(el=>{const s=liquid(el,{color:'deep',foam:true,speed:1400,rest:16});s.restCoins=true;s.cs=.6;   /* same resting foam, fizz and coin bubbles as every other button */
+document.querySelectorAll('[data-hover]').forEach(el=>{const s=liquid(el,{color:'deep',foam:true,speed:1400});s.cs=.6;   /* clean at rest; liquid, foam and coin bubbles only while hovered or focused */
   el.addEventListener('pointerenter',()=>{s.target=100;s.coinsUntil=now()+1800;kick()});el.addEventListener('pointerleave',()=>{s.target=0;kick()});
   el.addEventListener('focus',()=>{s.target=100;kick()});el.addEventListener('blur',()=>{s.target=0;kick()})});
 
 /* ───────── hero phone: Long/Short pills with the app's behaviour, playing by themselves ───────── */
-const HL=liquid(document.getElementById('hl'),{color:'up',foam:true,rest:19}),HS=liquid(document.getElementById('hs'),{color:'down'});
+const HL=liquid(document.getElementById('hl'),{color:'up',foam:true}),HS=liquid(document.getElementById('hs'),{color:'down'});
 HL.coinsUntil=now()+5000;
 /* the pills show the bot's reading; the bot itself opens the trade (no manual trading) */
 function openDemo(id){const el=document.getElementById(id),other=document.getElementById(id==='hl'?'hs':'hl'),os=id==='hl'?HS:HL,ms=id==='hl'?HL:HS;
   el.dataset.done=1;other.dataset.done=1;el.querySelector('small').textContent='Opened by the bot';other.querySelector('small').textContent=(id==='hl'?'Sell':'Buy')+' side';
-  os.rest=0;os.target=0;if(id==='hl')story();clearTimeout(openDemo.t);openDemo.t=setTimeout(()=>{ms.target=0;ms.rest=id==='hl'?19:0;HL.rest=19;delete el.dataset.done;delete other.dataset.done;
+  os.rest=0;os.target=0;if(id==='hl')story();clearTimeout(openDemo.t);openDemo.t=setTimeout(()=>{ms.target=0;ms.rest=0;HL.rest=0;delete el.dataset.done;delete other.dataset.done;
     document.querySelector('#hl small').textContent='Bot leans long';document.querySelector('#hs small').textContent='Sell side'},5600)}
 /* the trade's story around the phone: opened → SL/TP on Binance → profit locked → take profit */
 let storyT=[];function story(){storyT.forEach(clearTimeout);const T=['t1','t2','t3','t4'].map(i=>document.getElementById(i));T.forEach(x=>x.classList.remove('on'));
@@ -909,13 +913,13 @@ autoplay();
     const roi=inT?cur*10:0;pnl.textContent=(roi>=0?'+':'−')+Math.abs(roi).toFixed(2)+'%';pnl.className='rc-pnl mono '+(inT?(roi>=0?'u':'d'):'');
     const step=!inT?0:upto<E+18?1:!hit?(lockAt(upto)!==null?2:1):3;li.forEach((l,k)=>{l.classList.toggle('on',k===step);l.classList.toggle('done',k<step)});
     if(!STILL)id=requestAnimationFrame(frame)}
-  make();new IntersectionObserver(e=>{vis=e[0].isIntersecting;if(vis&&!id){if(!t0)t0=performance.now();id=requestAnimationFrame(frame)}}).observe(c);
+  make();new IntersectionObserver(e=>{vis=e[0].isIntersecting;if(vis&&!id){if(!t0)t0=performance.now()-CYCLE*.42;   /* first view opens mid-trade, never on an empty chart */id=requestAnimationFrame(frame)}}).observe(c);
   addEventListener('resize',()=>{W=0})})();
 
 /* final band: hold (like every start in the app) to jump into the setup */
-(function(){const b=document.getElementById('finGo'),s=liquid(b,{color:'gold',foam:true,rest:16});s.restCoins=true;s.cs=.6;   /* always a little liquid + foam on the left, like the app's leading pill */
+(function(){const b=document.getElementById('finGo'),s=liquid(b,{color:'gold',foam:true});s.cs=.6;   /* clean at rest; the hold fills it */
   holdable(b,s,()=>{b.querySelector('.lbl').textContent="Let's go";setTimeout(()=>{const st=document.querySelector('#setup .setup');scrollTo({top:st.getBoundingClientRect().top+scrollY-(innerWidth<900?78:92),behavior:STILL?'auto':'smooth'});
-    setTimeout(()=>{s.target=0;s.p=s.rest;s.b=[];s.pops=[];kick();b.querySelector('.lbl').textContent='Hold to start autopilot'},900)   /* back to the resting foam at once, off screen, so it never drains in view */},650)});
+    setTimeout(()=>{s.target=0;s.p=0;s.b=[];s.pops=[];kick();b.querySelector('.lbl').textContent='Hold to start autopilot'},900)   /* back to clean at once, off screen, so it never drains in view */},650)});
   b.addEventListener('pointerdown',()=>{if(!s.hold)b.querySelector('.lbl').textContent='Keep holding…'});
   ['pointerup','pointerleave'].forEach(n=>b.addEventListener(n,()=>{if(s.target<100)b.querySelector('.lbl').textContent='Hold to start autopilot'}))})();
 
@@ -929,7 +933,7 @@ const ST={plan:'m3',pay:'USDC (Solana)',paid:null,step:0,max:0,keys:false,margin
 const planEl=document.getElementById('plans');
 planEl.innerHTML=PLANS.map(p=>{const per=p.price/p.months,save=Math.round((1-per/49)*100);
   return`<button class="plan lp${p.id==='m12'?' best':''}" data-plan="${p.id}" aria-pressed="false"><span class="tag lbl ${p.tag?'':'none'}">${p.tag||'·'}</span><span class="term lbl">${p.term}</span><span class="price lbl">$${per%1?per.toFixed(2):per}<small>/mo</small></span><span class="per lbl">${p.months>1?'$'+p.price+' every '+p.months+' months':'Billed monthly'}</span><span class="save lbl">${save>0?'Save '+save+'%':'Cancel anytime'}</span></button>`}).join('');
-const PL={};planEl.querySelectorAll('.plan').forEach(el=>{PL[el.dataset.plan]=liquid(el,{color:'gold',foam:true,speed:900});PL[el.dataset.plan].cs=.55;   /* smaller coin bubbles inside the plan cards */el.addEventListener('click',()=>pickPlan(el.dataset.plan,true))});
+const PL={};planEl.querySelectorAll('.plan').forEach(el=>{PL[el.dataset.plan]=liquid(el,{color:'gold',foam:true,speed:900});PL[el.dataset.plan].cs=.42;   /* small coin bubbles so they never cover the price text */el.addEventListener('click',()=>pickPlan(el.dataset.plan,true))});
 function pickPlan(id,fx){ST.plan=id;for(const k in PL){const on=k===id,s=PL[k];if(on&&s.ghost){s.p=0}s.ghost=!on;s.coinsOnly=on;s.b=[];s.target=100;if(!on)s.p=100;s.el.setAttribute('aria-pressed',on)}if(fx)burst(PL[id],now());kick();
   const p=PLANS.find(x=>x.id===id);document.getElementById('planHint').textContent=p.term+' · $'+p.price+' · '+ST.pay;document.getElementById('s1').textContent=p.term}
 pickPlan('m3',false);
@@ -985,7 +989,7 @@ document.getElementById('tp').addEventListener('click',()=>{ST.trades=Math.min(1
 setM(100);
 
 /* launch */
-const GO=liquid(document.getElementById('go'),{color:'up',foam:true,rest:16});GO.restCoins=true;GO.cs=.6;   /* resting foam keeps fizz + small coin bubbles */
+const GO=liquid(document.getElementById('go'),{color:'up',foam:true});GO.cs=.6;   /* clean at rest; the hold fills it */
 holdable(document.getElementById('go'),GO,()=>{document.getElementById('go').dataset.done=1;document.getElementById('goh').textContent='Starting…';
   setTimeout(()=>{document.getElementById('pre').style.display='none';document.getElementById('live').classList.add('on');steps[3].classList.add('done');scan()},1100)});
 document.getElementById('go').addEventListener('pointerdown',()=>{if(!document.getElementById('go').dataset.lock)document.getElementById('goh').textContent='Keep holding…'});
@@ -1026,11 +1030,14 @@ function scan(){const ks=['BTC','ETH','SOL','BNB','XRP','DOGE','LINK','AVAX','AD
     return`<div class="a-grid two"><div class="a-grid">
       <section class="a-bal"><div class="lab">Your balance${hideBtn}</div><div class="big" id="abig">${money(eq())}</div><div class="chg ${today>=0?'u':'d'}" id="achg">${today>=0?'↗':'↘'} ${money(today,1)} (${Math.abs(pc).toFixed(2)}%) <span>today</span></div></section>
       <div class="a-chart"><canvas id="ach"></canvas></div>
+      ${A.paused||A.pos.length||A.hist.length?'':next()}
       ${A.paused?'':`<div class="a-tick"><i></i><div class="w"><span><b>Autopilot on</b> · ${fmt(ST.margin)} per trade · up to ${ST.trades} trades at once · SL and TP on Binance for every trade</span></div></div>`}
     </div><div class="a-grid">
       <div class="a-seg"><button data-seg="pos" class="${A.seg==='pos'?'on':''}">Positions</button><button data-seg="perf" class="${A.seg==='perf'?'on':''}">Performance</button><button data-seg="hist" class="${A.seg==='hist'?'on':''}">History</button></div>
       ${stats()}${seg}
     </div></div>`}
+  function next(){const r=(n,t,b)=>`<div class="a-next-r"><span class="n mono">${n}</span><div><b>${t}</b><span>${b}</span></div></div>`;
+    return`<div class="a-card a-next"><h3>What happens next</h3>${r(1,'The bot scans every pair','Trend, momentum and volatility, around the clock.')}${r(2,'It opens a trade when a setup clears its bar',`${fmt(ST.margin)} margin, 10×, with SL and TP placed on Binance.`)}${r(3,'You follow it here','Open trades show under Positions, finished ones under History.')}</div>`}
   function perfKV(){const n=A.hist.length,best=n?Math.max(...A.hist.map(h=>h.pnl)):0,worst=n?Math.min(...A.hist.map(h=>h.pnl)):0;
     return[['Closed trades',n],['Wins',wins()],['Losses',n-wins()],['Win rate',(n?(wins()/n*100).toFixed(1):'0.0')+'%'],['Realized P&L',money(realized(),1)],['Best trade',money(best,1)],['Worst trade',money(worst,1)]]
       .map(([k,v])=>`<div class="a-kv"><span>${k}</span><b>${v}</b></div>`).join('')}
@@ -1164,8 +1171,8 @@ function odo(el,str){const old=el.dataset.v||'';el.dataset.v=str;if(old.length!=
    Never put a made-up number here. ───────── */
 (function(){const STATS_URL='/api/public/stats',el=document.getElementById('pool'),n=document.getElementById('pooln'),msg=document.getElementById('poolmsg'),goal=document.getElementById('poolgoal');
   const s=liquid(el,{color:'gold',foam:true,rest:14,speed:1600});s.restCoins=true;s.dens=1.6;let count=null;
-  const MS=[100,250,500,1000,2500,5000,10000,25000,50000,100000];
-  function show(c,first){const g=MS.find(m=>m>c)||Math.ceil((c+1)/100000)*100000;goal.textContent=g.toLocaleString('en-US');
+  const MS=[100,250,500,1000,2500,5000,10000,25000,50000,100000],SHOW_FROM=25,sec=document.getElementById('members'),navm=document.getElementById('navMembers');   /* the section stays hidden until the real count reaches SHOW_FROM */
+  function show(c,first){const on=c>=SHOW_FROM;sec.hidden=!on;navm.hidden=!on;if(!on)return;const g=MS.find(m=>m>c)||Math.ceil((c+1)/100000)*100000;goal.textContent=g.toLocaleString('en-US');
     odo(n,c.toLocaleString('en-US'));msg.textContent=c===0?'Be one of the first':c===1?'1 trader runs on autopilot':c.toLocaleString('en-US')+' traders run on autopilot';
     s.target=Math.max(14,Math.min(100,c/g*100));if(!first){s.speed=1600;burst(s,now());el.animate&&el.animate([{transform:'scale(1)'},{transform:'scale(1.012)'},{transform:'scale(1)'}],{duration:600})}kick()}
   async function sync(){try{const r=await fetch(STATS_URL,{cache:'no-store'});if(!r.ok)throw 0;const d=await r.json();const c=Math.max(0,Math.floor(+d.subscribers||0));

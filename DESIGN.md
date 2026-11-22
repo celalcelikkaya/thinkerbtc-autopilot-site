@@ -118,9 +118,11 @@ second bubble or particle system; extend the engine instead, so everything moves
     ring, the coin popping out and small droplets.
   - **Density comes in waves**: every 1.4–6 s the rate switches between almost still, normal and busy.
 - **Rest states**:
-  - Start buttons ("Hold to start autopilot") rest at about 16% fill with foam, plain bubbles and
-    coin bubbles. They never drain to empty in view.
-  - Selected plan card: gold fill, **coin bubbles only**.
+  - Buttons and pills rest **clean**: no liquid, foam or bubbles while idle. Gold buttons fill on
+    hover or focus; "Hold to start autopilot" and the other hold buttons fill only while held, and
+    reset to clean off screen so they never drain in view. (Resting foam read as a torn edge and
+    put bubbles under the labels.)
+  - Selected plan card: gold fill, **coin bubbles only**, small (`cs` 0.42) so they never cover the price.
   - Unselected plan cards: no liquid, **clear glass bubbles only** (grey rim, white glint).
   - Background fields (hero, final band): no liquid, coin and plain bubbles, lowered opacity.
 - **Hold to confirm** `holdable()`: anything that starts, stops or pauses trading needs a 1.2 s hold.
@@ -136,7 +138,7 @@ second bubble or particle system; extend the engine instead, so everything moves
 - Only describe features the service really offers. Not offered today: Telegram alerts, manual
   trading.
 - No invented testimonials, user counts, returns or performance figures. Illustrations must look
-  like illustrations.
+  like illustrations: an illustrative chart carries a visible "Example trade" tag.
 - Competitor facts need the company's own page as the source and a "checked on" date.
 - Risk wording stays visible and is never softened.
 
@@ -169,7 +171,8 @@ second bubble or particle system; extend the engine instead, so everything moves
 - The subscriber pool reads the real count from `GET /api/public/stats` (`{"subscribers": n}`),
   every 15 s and when the tab gets focus. A rise pours more liquid, bursts coins and rolls the
   number (odometer). The fill shows progress to the next milestone (100, 250, 500, 1,000 …).
-- Until the endpoint answers, it shows the empty state ("Be one of the first") at the resting level.
+- The section and its "Subscribers" menu link stay **hidden until the real count reaches 25**
+  (`SHOW_FROM`). A public "0" works against trust; until then, nothing is shown at all.
 - **Never hard-code or invent a count.**
 
 ## 10. Accessibility

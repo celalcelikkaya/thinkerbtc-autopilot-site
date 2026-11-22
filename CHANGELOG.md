@@ -16,6 +16,17 @@ Format:
 
 ---
 
+## 2026-11-22 — Review polish: clean resting buttons, example tag, hidden empty pool
+- Version: v1.2.0
+- Contributor: Claude Code (Claude Opus 5.5) for @celalcelikkaya
+- What changed: Buttons and the hero Long pill now rest clean (no foam or bubbles until hovered or
+  held), and plan card coin bubbles are smaller so they no longer cover the price. The trade chart
+  carries an "Example trade" tag and opens mid-trade instead of on an empty chart. The subscriber
+  pool and its menu link stay hidden until the real count reaches 25. A new subscriber's dashboard
+  shows a "What happens next" card until the first trade.
+- Files: src/index.src.html, index.html, DESIGN.md, CHANGELOG.md
+- Pull request: see the v1.2.0 release
+
 ## 2026-11-20 — Binance settings in the Connect step
 - Version: v1.1.0
 - Contributor: Claude Code (Claude Opus 5.5) for @celalcelikkaya
