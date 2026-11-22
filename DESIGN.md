@@ -106,7 +106,7 @@ Scale:
 - Breakpoints: the pill shows all links from 1280px; below that it holds the logo and a menu button. Grids
   stack below 1024px. Under 600px the pill and the start block sit side by side in the centre; under 440px
   the pill shows the logo without the wordmark. Phones use full-width buttons in the content.
-- No sideways page scroll at 320px and up. Wide tables scroll inside `.cmpw`.
+- No sideways page scroll at 320px and up, and no table that scrolls sideways: the compare table restacks below 1024px.
 
 ## 4a. Material: Liquid Glass
 
@@ -184,7 +184,14 @@ dashboard's numbers) stays solid so it reads first. Never put glass on glass.
   says why; after the hold it gives way to "Autopilot is live".
 - **Inputs** `.inp`: 52px on `--bg2`, `--line2` rule, green focus ring, green when valid, red when not.
 - **Tick boxes** `.pm`: 20px square that turns green when ticked.
-- **Compare table**: ThinkerBTC column tinted green with a 2px green top rule.
+- **Compare table** `.cmp`: no box around it, only hairline rules. ThinkerBTC is one raised lane (green-tinted,
+  thin green rim, 2px green top rule, rounded at both ends) with its answers in 17px white and its price in large
+  mono; the four others are quiet columns in grey with their names in small mono capitals; the questions sit in the
+  margin column in mono capitals, so the lane lines up with the heading. The lane's head is the liquid capsule that
+  fills green when the table comes into view. Below 1024px each question becomes a block: the ThinkerBTC answer as
+  a tinted card, the four others in a 2x2 grid, every cell naming its company (`data-k`); ARIA table roles keep it a
+  table for screen readers. "Only on ThinkerBTC" follows as a ruled row of three green ticks (`.only`), and the
+  sources line sits under it.
 - **FAQ**: two ruled columns of `details`, green `+` that turns to `×`.
 - **Section menu** `.menu-b` + `.menu` (below 1280px): the 44px button in the pill opens a panel upward,
   above the bar, with large links and the start button; the page dims behind it.
@@ -211,7 +218,7 @@ dashboard's numbers) stays solid so it reads first. Never put glass on glass.
   `cubic-bezier(.32,.72,0,1)`, `--t-press` 160ms, `--t-ui` 200ms, `--t-panel` 350ms.
 - **Fluid scrolling.** A mouse wheel's notches are eased into one glide (`step()` in the fluid-scrolling script,
   13% of the remaining distance per frame); trackpads and touch keep their native momentum, and anything that
-  scrolls on its own (dialogs, menu, reading sheet, compare table, phone row) is left alone. The hero arrives once on
+  scrolls on its own (dialogs, menu, reading sheet, phone row) is left alone. The hero arrives once on
   load (`rise`, staggered 0–320ms on `--spring`). Section content (`.blk .wrap > *`, `.fin`) rises 40px and fades in
   over its first 240px into view (`reveal`, a CSS scroll-driven animation on `view()`), so it tracks the scroll,
   reverses when you scroll back and is never hidden at rest; browsers without scroll-driven animations show it

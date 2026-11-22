@@ -74,6 +74,10 @@ Format:
   does, the risk line and a link to the Risk Disclosure, and an "Accept and enter" button. Accepting opens the menu
   bar out of the button, brings in Start autopilot and the Scroll cue, and unlocks the page; the choice is remembered
   for the session, and a direct link to the dashboard skips it.
+  "How it compares" is redesigned with the same words and prices: the boxed table became hairline rows with
+  ThinkerBTC as one raised green lane, lined up under the heading, against four quiet columns, and "Only on
+  ThinkerBTC" became a row of three green ticks. On tablets and phones it no longer scrolls sideways: each question
+  is a block with ThinkerBTC's answer on a green card and the four others in a 2x2 grid, each naming its company.
 - Files: src/index.src.html, index.html, build.py, assets/phones/*.webp, assets/fonts/Anton-Regular.woff2,
   assets/fonts/Anton-OFL.txt, assets/illustrations/*.svg, mockups/*.png, DESIGN.md, AGENTS.md,
   CONTRIBUTING.md, README.md, CHANGELOG.md
