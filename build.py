@@ -7,6 +7,8 @@ Placeholders in the source:
   {{LOGO}}        -> assets/logo.png
   {{COIN:BTC}}    -> assets/coins/BTC.svg (any coin file name)
   {{COINS}}       -> a JSON object of every coin in assets/coins
+  {{IMG:path}}    -> any image under assets/, e.g. {{IMG:phones/plans.webp}}
+  {{FONT:path}}   -> a font under assets/, e.g. {{FONT:fonts/Anton-Regular.woff2}}
 
 Usage:  python build.py
 """
@@ -21,8 +23,11 @@ SRC = ROOT / "src" / "index.src.html"
 OUT = ROOT / "index.html"
 
 
+MIME = {".png": "image/png", ".svg": "image/svg+xml", ".webp": "image/webp", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".woff2": "font/woff2"}
+
+
 def data_uri(path: pathlib.Path) -> str:
-    mime = "image/png" if path.suffix == ".png" else "image/svg+xml"
+    mime = MIME.get(path.suffix.lower(), "application/octet-stream")
     return f"data:{mime};base64," + base64.b64encode(path.read_bytes()).decode()
 
 
@@ -40,6 +45,14 @@ def main() -> int:
         return coins[name]
 
     html = re.sub(r"\{\{COIN:(\w+)\}\}", coin, html)
+
+    def image(m: re.Match) -> str:
+        path = (ROOT / "assets" / m.group(1)).resolve()
+        if not path.is_file() or (ROOT / "assets") not in path.parents:
+            sys.exit(f"Unknown image {m.group(1)}: add it under assets/")
+        return data_uri(path)
+
+    html = re.sub(r"\{\{(?:IMG|FONT):([\w./-]+)\}\}", image, html)
     left = re.findall(r"\{\{[^}]+\}\}", html)
     if left:
         sys.exit(f"Unreplaced placeholders: {sorted(set(left))}")

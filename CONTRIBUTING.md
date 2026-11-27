@@ -32,7 +32,7 @@ and `v1.0.0` (the original) is never touched.
 2. Change `src/index.src.html` (and `assets/` if you add images).
 3. Run `python build.py`, then check `index.html` in a browser:
    - phone width (about 375 px) and desktop width,
-   - dark and light mode,
+   - at 390, 768 and 1440 px wide,
    - with reduced motion turned on.
 4. Add your CHANGELOG entry, including the version your change will be released as.
 5. Open a pull request against `main`. Say what you changed and why, and add before/after
@@ -46,10 +46,10 @@ changelog.
 
 ## What we want from you
 
-- Changes that follow [DESIGN.md](DESIGN.md): tokens for every colour, the three typefaces, the
-  Liquid Pill engine for every liquid or bubble effect, hold-to-confirm for trading actions.
+- Changes that follow [DESIGN.md](DESIGN.md): tokens for every colour, Anton for headlines, the system font for text, JetBrains Mono for numbers, Liquid Glass only on the floating layer, the
+  liquid engine for every liquid or bubble effect, hold-to-confirm for trading actions.
 - Small, focused pull requests, one topic each.
-- Pages that work on phones first and in both themes.
+- Pages that work on phones first and keep the 12-column grid on desktop.
 - Accessible controls: labels, focus states, keyboard support.
 
 ## What we don't accept

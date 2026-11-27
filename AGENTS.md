@@ -10,8 +10,8 @@ You are working on the ThinkerBTC Autopilot **website** (user interface only). R
    changed in plain words, and the files touched. A change without a changelog entry is not
    finished.
 2. **Write in English**: page text, comments, commits, pull requests and the changelog.
-3. **Follow DESIGN.md**: colour tokens only, the three typefaces, the one Liquid Pill engine
-   (`liquid()`), hold-to-confirm (`holdable()`) for trading actions, both themes, phone first,
+3. **Follow DESIGN.md**: colour tokens only, Anton for headlines, the system font for text, JetBrains Mono for numbers, Liquid Glass only on the floating layer, the one liquid engine
+   (`liquid()`), hold-to-confirm (`holdable()`) for trading actions, the dark theme, phone first,
    reduced motion respected.
 4. **Rebuild** with `python build.py` and commit `src/index.src.html` and `index.html` together.
 5. **Work through a pull request.** Don't push to `main` and don't merge your own pull request.

@@ -1,142 +1,255 @@
-# Design system
+# Design system: "Night desk"
 
 Everything a contributor needs to keep the ThinkerBTC Autopilot website consistent. If something
 you need is not covered here, follow the closest existing pattern in `src/index.src.html` and ask
-in your pull request.
+in your pull request. The previous look (v1.x) stays available in Releases and git history.
+
+**The idea:** the page is a trading desk after hours. One instrument, the live trade chart with its
+entry, stop-loss and take-profit lines, runs the width of the first screen and tells the story.
+Everything else is set like the desk's printed reference sheet: a strict 12-column grid, hairline
+rules instead of boxes, tabular numbers, black with market green and red. No glowing gradients, no grids of icon
+cards, no floating toasts.
 
 ## 1. Brand
 
-- Name: **ThinkerBTC** (one word). The wordmark is written `THINKER` + `BTC`, with `BTC` in BTC orange.
-- Logo: `assets/logo.png`, always shown round (`border-radius: 50%`).
-- Personality: confident, lively, trustworthy. Playful motion lives inside the brand colours;
-  no neon, casino or arcade looks.
+- Name: **ThinkerBTC** (one word). The wordmark is `THINKER` + `BTC`, with `BTC` in green, set in
+  Anton with wide letter-spacing (.045em).
+- Logo: `assets/logo.png`, always round (`border-radius: 50%`) with a 1px `--line2` ring.
+- Personality: calm, precise, trustworthy. Energy comes from the chart and the liquid engine, never
+  from decoration.
 
 ## 2. Colour
 
-All colours are CSS custom properties on `:root`. Use the tokens, never a raw hex value in a
-component. Every token has a dark and a light value; both themes must work.
-
-### Brand and signal colours (same in both themes)
+Dark theme only (`color-scheme: dark`). All colours are custom properties on `:root`; use the
+tokens, never a raw hex value in a component.
 
 | Token | Value | Use |
 |---|---|---|
-| `--gold` | `#F7931A` | **Bitcoin orange.** Primary buttons, liquid fills, highlights, the `BTC` in the wordmark, big headline accents. |
-| `--gold2` | `#FFA940` | Top of the gold button gradient. |
-| `--ink` | `#1B1300` | Text and icons on gold surfaces. |
-| `--up` | `#089981` | Profit, long, success. TradingView candle green. |
-| `--down` | `#F23645` | Loss, short, errors. TradingView candle red. |
-| `--blue` | `#3B74FF` dark / `#0052FF` light | Informational accents only (for example the "SL and TP on Binance" note). |
-| `--acc` | `#578BFA` dark / `#0052FF` light | **Subscriber dashboard only**: selected tabs, chart line, links (investor-portal look). |
+| `--bg` | `#08090A` | Page background (near-black, never `#000`). |
+| `--bg2` | `#0D0E10` | Insets: inputs, summary tiles, the readout's chart well. |
+| `--card` | `#111214` | Panels: the trade chart, setup panel, compare table, dialogs. |
+| `--card2` | `#181A1D` | Raised controls: plan cards, chips, idle pills, buttons. |
+| `--line` | `#232529` | Hairline rules and panel borders. |
+| `--line2` | `#34373D` | Stronger rules: input borders, ghost buttons, focusable outlines. |
+| `--fg` | `#EDEEF0` | Main text. |
+| `--fg2` | `#A4A7AE` | Secondary text (7:1 or better on every surface). |
+| `--fg3` | `#868991` | Captions, hints, axis labels (4.9:1 or better on every surface). |
+| `--up` | `#16C784` | **Market green: price up, gain, take profit.** Fills and lines. |
+| `--down` | `#EA3943` | **Market red: price down, loss, stop loss, errors.** Fills and lines. |
+| `--up-ink` / `--down-ink` | `#2AD58E` / `#FF5A64` | **Text** for gain / loss (9:1 and 6:1 on `--bg`). |
+| `--acc` | `var(--up)` | **The one action colour is the market green.** Primary buttons, the selected state, the label tick, liquid fills, focus ring, the hero accent word. |
+| `--acc2` / `--acc-ink` | `#3DDC97` / `var(--up-ink)` | Lighter green; small green text. |
+| `--ink` / `--on-acc` | `#03140B` | Text on green surfaces (8.6:1). |
+| `--blue` | `#7896F0` | Informational only: the "SL and TP on Binance" log icon, "payment found". |
 
-Hover fill on gold buttons: `#E2761B` (deeper BTC orange).
+The page, the dashboard and the illustrations share one green. Liquid colours: `gold` (the
+accent green; the key name is historical), `deep` (`#0E9F67`, button hover), `up`, `down`, and
+`mid` (`--fg2`, for the medium margin share and the pause button).
 
-### Text colour for gold
-
-| Token | Dark | Light | Use |
-|---|---|---|---|
-| `--gold-ink` | `#F7931A` | `#B8640C` | **Small** gold text: eyebrows, links, tags, labels. The light value keeps it readable. |
-
-Large display text (the hero headline accent, the wordmark) uses `--gold`, not `--gold-ink`.
-
-### Neutrals
-
-| Token | Dark | Light | Use |
-|---|---|---|---|
-| `--bg` | `#06070C` | `#F5F6FB` | Page background. |
-| `--bg2` | `#0B0D16` | `#ECEEF6` | Inset areas: inputs, tape, summary boxes. |
-| `--card` | `#11141F` | `#FFFFFF` | Cards and panels. |
-| `--card2` | `#1A1E2D` | `#E8EBF4` | Raised controls on cards: chips, idle pills, plan cards. |
-| `--line` | `#242A3D` | `#D9DDEA` | Borders and dividers. |
-| `--fg` | `#F3F4FA` | `#0E1120` | Main text. |
-| `--fg2` | `#A9AFC6` | `#4A5170` | Secondary text. |
-| `--fg3` | `#6E7591` | `#7E859F` | Captions, hints, axis labels. |
-
-`--glow` (`rgba(247,147,26,.18)` dark, `.16` light) and `--shadow` are for soft depth only.
-
-### Rules
-
-- Green means up or profit, red means down or loss. Never use them for anything else.
-- Don't introduce new hues. If you need a tint, use `color-mix(in srgb, var(--token) N%, transparent)`.
-- Check contrast on both themes. Small text on light backgrounds must not use `--gold`.
+Rules:
+- Green means up and is the one action colour; red means down (loss, stop loss, errors). Red is
+  never a button, a selection or decoration.
+- A state that is neither up nor down stays white or grey: the current step, pending, paused, the
+  profit lock line, a medium margin share. Zero P&L is neutral.
+- Text on a green fill is `--ink`; text on a red fill is white.
+- One accent. If you need a tint, use `color-mix(in srgb, var(--token) N%, transparent)`.
+- Body and caption text at least 4.5:1, large text at least 3:1.
+- Depth comes from rules and surface steps (`--bg` → `--card` → `--card2`), not shadows or glows.
+  `--shadow` is only for floating things: dialogs, the dashboard toast, the phone start bar.
 
 ## 3. Type
 
-| Role | Family | Weights | Token |
+| Role | Family | Settings | Token |
 |---|---|---|---|
-| Display (headings, wordmark, big numbers on the site) | Unbounded | 600 / 700 / 800 | `--f-display` |
-| Body and UI | Inter | 400–800 (dashboard numbers 900) | `--f-body` |
-| Numbers, prices, codes | JetBrains Mono | 500 / 700 | `--f-mono` + `font-variant-numeric: tabular-nums` |
+| Display (headlines, wordmark, panel titles, menu links) | Anton | 400 (its only weight; never set it bolder) | `--f-display` |
+| Body and UI | The system font (SF Pro on Apple devices, Segoe UI / Roboto elsewhere) | 400–650 | `--f-body` |
+| Numbers, prices, tickers, codes | JetBrains Mono | 500–700 + `tabular-nums` | `--f-mono` |
 
-Fonts load from Google Fonts with system fallbacks. Scale in use:
+Anton (Vernon Adams, SIL Open Font License, `assets/fonts/Anton-OFL.txt`) is embedded in the page from
+`assets/fonts/Anton-Regular.woff2`, a Latin subset (18 KB, unhinted, cut from the OTF, with the Turkish İ Ş Ğ added) built into the page with `{{FONT:path}}`. Display rules set
+`font-synthesis: none` so the browser never fakes a bold. If a headline needs a character outside the subset,
+re-subset from the full font. Text uses the platform's own font, as Apple advises: it ships optical sizing and
+tracking, and nothing has to load. JetBrains Mono (`500;600;700`) loads from Google Fonts.
 
-- Hero headline: `clamp(36px, 5.6vw, 66px)`, weight 800, line-height 1.02.
-- Section heading (`.sh h2`): `clamp(28px, 3.6vw, 44px)`, weight 800.
-- Panel heading: 22px / 700. Card heading: 16–18px / 700.
-- Body: 16px (lead 17–19px). Secondary: 14–15px. Captions: 12–13px.
-- Eyebrow: 12px, weight 600, uppercase, letter-spacing .14em, `--gold-ink`.
-- Headings use `text-wrap: balance`; keep running text under about 65 characters wide.
+Scale:
+- Hero headline: `clamp(48px, 5.7vw, 82px)`, line-height 1.02.
+- Section heading (`.sh h2`): `clamp(34px, 4.1vw, 56px)`, line-height 1.1, max 22ch. Closing band: `clamp(40px, 5vw, 72px)`.
+- Panel heading: 24px Anton, letter-spacing .01em. Card heading: system font 15.5–16.5px / 650 (Anton is for display sizes).
+- Body 16px (lede 17.5px). Secondary 14–15px. Captions 12–13px.
+- **Label** (`.label`): 12.5px, 600, uppercase, letter-spacing .1em, `--fg2`, with a 14×2px green
+  tick before it. Labels sit in the margin column beside a heading, not stacked above it.
+- Every money figure, price, percentage and count is set in JetBrains Mono.
+- Headings use `text-wrap: balance`; running text stays under about 62ch.
 
 ## 4. Layout and shape
 
-- Content width: `.wrap` max 1180px, side gutter `max(16px, env(safe-area-inset-*))`.
-- Sections: 96px top padding; the sticky bar is 68px high.
-- Radii: buttons and chips `999px`; pills 16px; cards 22–28px; panels 28px; big bands 36px.
-- Use flex/grid `gap`, not margins between siblings.
-- Must work at phone width (375px) with no sideways page scroll. Wide tables scroll inside their
-  own container.
-- Safe areas: sticky things use `env(safe-area-inset-*)`.
+- Wrap: `--wrap` 1200px content, gutter `--gutter` `clamp(16px, 4vw, 40px)` plus safe areas.
+- **12-column grid** inside sections. Section header `.sh`: label in columns 1–3, heading and lede in
+  4–12. Below 1024px everything stacks to one column.
+- **Setup is a checkout** (`#setup`): the label, heading and lede on the left with the four steps as a glass
+  capsule (`.steps`) on the right; below, the current step in one card (`.panel`) and beside it the receipt
+  (`.rcpt`, about 380px, sticky). Below 1024px the steps sit under the heading and the receipt follows the card;
+  under 480px the steps show labels only, and finished ones turn green.
+- Sections: `--section` 120px top padding (84px on phones). Menu bar: `--bar-h` 56px. Ticker: `--tick-h` 40px.
+- **Coin ticker** (`body > .tape`): pinned to the top of the screen on every page width, always in view while
+  scrolling; a Liquid Glass strip (see Material) that content scrolls under, with a soft lower edge instead of a rule.
+  Anchored headings land just below it.
+- **Menu bar** (`header.bar`): floats at the bottom of the screen, centred. A Liquid Glass capsule holds the
+  logo, wordmark and the section links (system font, 14px, sentence case); "Start autopilot" is its own green
+  capsule of the same height at the right edge. The menu opens upward from it on a spring. The page keeps bottom padding so nothing ends under it.
+- Radii (Apple-style, concentric: an inner corner is the outer one minus the padding): `--r-sm` 10px,
+  `--r-ctl` 14px (inputs, tiles), `--r-card` 20px (plan cards), `--r-panel` 24px (panels, chart), `--r-band`
+  28px (dialogs, sheets, closing band). Buttons, chips, tags, segmented controls and tab bars are capsules
+  (`--r-pill`); round icon buttons are circles.
+- Lists of facts are ruled lists (a 1px top rule per item), not cards. Nested boxes are not allowed.
+- Touch targets: at least `--tap` (44px) on touch screens.
+- Breakpoints: the pill shows all links from 1280px; below that it holds the logo and a menu button. Grids
+  stack below 1024px. Under 600px the pill and the start block sit side by side in the centre; under 440px
+  the pill shows the logo without the wordmark. Phones use full-width buttons in the content.
+- No sideways page scroll at 320px and up, and no table that scrolls sideways: the compare table restacks below 1024px.
+
+## 4a. Material: Liquid Glass
+
+Glass is the floating layer only: the ticker, the menu bar and its menu, dialogs, the reading sheet, the app's
+toast and its tab bar, and the secondary button. Content (the trade chart, plan cards, panels, lists, the
+dashboard's numbers) stays solid so it reads first. Never put glass on glass.
+
+- One recipe, in tokens: a tint (`--glass-tint`, thicker `--glass-thick` where you read: menu, dialogs, sheet;
+  `--glass-strip` for the ticker), `--glass-fx` (blur 24px, saturate 185%), a specular rim (`--glass-rim`, a 1px
+  gradient border that is brightest top-left), a sheen (`--glass-sheen`) that follows a real pointer, and
+  `--glass-depth` (a lit top edge plus a soft drop shadow). Add `.glass` to give something new the material.
+- Motion: springs as CSS `linear()` curves. `--spring` (critically damped, response .35s, run 600ms) for things
+  that appear without a gesture: the menu, dialogs. `--spring-bounce` (damping .8, run 700ms) only for the toast,
+  which arrives with momentum. Reduced motion turns both into short fades.
+- Fallbacks: no `backdrop-filter` support, `prefers-reduced-transparency` and `prefers-contrast: more` all turn
+  the same shapes solid (`#181A1D`); higher contrast also draws a grey rim.
 
 ## 5. Components
 
-- **Primary button** `.btn.gold`: gold gradient, `--ink` text, pill shape, height 52 (big 64,
-  small 40). Hover fills it with deeper orange liquid.
-- **Secondary button** `.btn.ghost`: transparent with a `--line` outline.
-- **Chips** `.chip`: 38px pills on `--card2`; the selected chip is inverted (`--fg` background).
-- **Plan cards** `.plan`: `--card2`; the selected card fills with gold liquid; "Best value" has a
-  gold outline.
-- **Inputs** `.inp`: 54px high on `--bg2`, gold focus ring, green ring when valid, red when invalid.
-- **Tick boxes** `.pm`: rounded square that turns green when ticked.
-- **Toasts**: small cards with a 30px icon tile tinted by meaning (green, gold or blue).
-- **Side panel** (Risk Disclosure): slides in from the right on desktop, up from the bottom on phones.
-- **Subscriber dashboard**: follows the investor-portal look (greeting + LIVE status, coin tape,
-  big centred balance, area chart in `--acc`, status strip, Positions / Performance / History
-  segment, three stat tiles, position rows). Bottom tab bar on phones, left sidebar from 960px.
+- **Primary button** `.btn.gold`: a green capsule with a lit top edge (`::before`), `--ink` text, 48px (big 60,
+  small 40). The liquid engine fills it with deeper green on hover.
+- **Secondary** `.btn.ghost`: a clear glass capsule (see Material). `.btn.dark`: `--bg` with an
+  outline, used for the closing hold button.
+- **Face** `#face` (the opening screen, above the hero): an original ASCII android bust drawn on a canvas from a
+  depth map: flat armour plates with seams, a crest down the forehead, an angled brow plate, slanted eye slits that
+  glow (near-white mint with a green glow, drawn last and unaffected by the light), a vent grille for a mouth, sensor
+  discs where ears would be, a segmented neck with pistons, and plated shoulders that fade out before the Scroll cue.
+  One screen tall under the ticker. A smooth glyph ramp (`. , : - = + * # % @`) keeps each plate reading as one
+  surface; a little ambient light keeps the shadow side visible. The light and a little parallax follow the pointer
+  anywhere on screen while it is in view; it redraws only while the gaze moves. Behind him, "AUTOPILOT" in Anton
+  (`.face-word`, up to 20rem, a silver gradient from 20% to 5% white): the head paints its own cells in `--bg` first,
+  so it truly covers the word. The word stays still and centred (it no longer drifts with the pointer). Every 2.8s the word changes
+  language (English, Spanish, Japanese, French, Russian, Turkish, Arabic, Chinese, Hindi, German, Korean, Italian): it
+  fades and blurs out, the next settles in, and a long one is scaled down to fit. Each word is measured on a
+  canvas and offset (`--dx`, `--dy`) so its letters sit on the exact centre: Latin and Cyrillic centre on their
+  capitals, so accents never move a word; other scripts centre on their ink, with one named font per script so the
+  page draws what was measured. The word box has .25em of padding so the clipped gradient never cuts off marks above
+  or below the line. Latin words stay in Anton; Russian
+  uses Impact, the nearest system face; Japanese, Arabic, Chinese, Hindi and Korean use the heaviest system face for
+  their script (`.alt`). Each word carries its own `lang` (so Turkish capitalises to OTOPİLOT) and Arabic runs
+  right to left. It pauses off screen and in a hidden tab, and stays on "Autopilot" with reduced motion. From 1024px it sits at eye
+  level, poster style; on tablets and phones, where the head would hide it, it moves up above the crown. A soft
+  green/red glow sits behind it
+  and a quiet "Scroll" cue links to the hero (`#intro`). Reduced motion keeps it still. It is an original design, not a
+  copy of any film or comic character; keep it that way. The renderer and lighting come from the client's
+  `ascii-face.html`.
+- **Gate** `#gate` (inside the face screen): the site opens on the android alone, with no menu bar, and does not
+  scroll. A short note ("Before you enter", what ThinkerBTC does, the risk line from the Risk Disclosure and a link
+  to it) over a fade, and **Accept and enter**, a green capsule sitting exactly where the menu bar will be. Accepting
+  fades the note, folds the button away and opens the menu bar out of it (`clip-path` from the button's width to
+  full, `--spring`), the links fade in one after another, Start autopilot pops in beside it (`--spring-bounce`), the
+  Scroll cue appears and the page unlocks. While the gate is up, everything else is `inert` and touch scrolling is
+  stopped. It is decided before the first paint (`html.gated`, set by a tiny script at the top of the page) and
+  remembered for the session (`sessionStorage` `tbtc-entered`); a direct link to `#dashboard` skips it. Reduced
+  motion turns the opening into a fade.
+- **Trade chart** `.desk`: the hero instrument. Header row (pair, timeframe, an "Illustration" tag,
+  live P&L in mono), the canvas, then the four steps as a ruled row whose top rule turns white for
+  the current step and green for finished ones.
+- **Readout** `.readout`: the bot's market reading (price, indicators, Long/Short liquid pills, bias
+  bar). **Trade log** `.log`: the trade's four events as ruled rows; the current event is full
+  strength, the rest at half.
+- **Phone screens** `.phones` (section `#phone`): four WebP images of the real site in a generic phone frame
+  (`assets/phones/*.webp`, 560px wide with transparent edges), four across on desktop, a swipeable snap row
+  below 860px, each with a short mono label and the "Screens show illustrative data" note under the row.
+  Re-take them when the screens change.
+- **Illustrations** `.art` (`assets/illustrations/*.svg`, from the ThinkerBTC Autopilot SVG pack): the ivory
+  Autopilot capsule, decorative (`alt=""`, `aria-hidden`), static, one per moment. Placed: in the hero,
+  `.hero-art` (`hero-trade-line.svg`, Autopilot taking the trade line), top right beside the headline's short
+  second line, behind the text, its line fading toward the buttons through a mask; at 680px and below it moves
+  into the flow above the label, cropped to Autopilot and the start of its line. It stays an accent (at most
+  400px wide) so the trade chart still leads the first screen. Also beside the Connect and Margin step headings (`.pane-h`), at the top of the receipt
+  (`review-and-hold.svg`, desktop only), above "ThinkerBTC
+  is trading for you", on the right of the closing band, and in the dashboard's "No open positions" and "No closed
+  trades" states. Do not add them to lists, cards or every section; a new one needs a moment it actually depicts.
+  The pack's orange accents were recoloured to the site green (same hue as `--up`); new artwork must use green
+  `#16C784` (light `#6FE3B0`-ish highlights, dark `#0F9461`-ish shadows) in place of orange.
+- **Chips** `.chip`: 38px, radius 8px, 1px inset rule; the selected chip is inverted (`--fg` ground).
+- **Plan list** `.plan`: one row per plan (radio, term with its tag, billing line, price per month, saving) on
+  `--bg2`. The chosen row gets a 1.5px green outline, a faint green tint and a filled radio; no liquid fill.
+  Under 600px the saving hides.
+- **Receipt** `.rcpt` (Liquid Glass): Plan, Exchange (grey until keys are connected or skipped), Margin per
+  trade, Open at once, then Due today (turns to green "Paid" once the payment is confirmed) and Pay with. The
+  hold-to-start button lives here: locked until the last step and the Risk Disclosure are done, its small line
+  says why; after the hold it gives way to "Autopilot is live".
+- **Inputs** `.inp`: 52px on `--bg2`, `--line2` rule, green focus ring, green when valid, red when not.
+- **Tick boxes** `.pm`: 20px square that turns green when ticked.
+- **Compare table** `.cmp`: no box around it, only hairline rules. ThinkerBTC is one raised lane (green-tinted,
+  thin green rim, 2px green top rule, rounded at both ends) with its answers in 17px white and its price in large
+  mono; the four others are quiet columns in grey with their names in small mono capitals; the questions sit in the
+  margin column in mono capitals, so the lane lines up with the heading. The lane's head is the liquid capsule that
+  fills green when the table comes into view. Below 1024px each question becomes a block: the ThinkerBTC answer as
+  a tinted card, the four others in a 2x2 grid, every cell naming its company (`data-k`); ARIA table roles keep it a
+  table for screen readers. "Only on ThinkerBTC" follows as a ruled row of three green ticks (`.only`), and the
+  sources line sits under it.
+- **Subscriber pool** `.pool`: no card. The real count is set huge in Anton (rolling digits), with the message, the
+  "Live" dot (only once the server answers) and the next milestone on the right. Below it an open tank (`.pool-bar`,
+  96–148px tall) fills with the green liquid as count / next milestone, over a ruler marked 0, half and the milestone.
+  At 0 the liquid rests on a sliver kept wider than the tank's rounded end. A ruled "Milestones" row (`.ms`) lists the
+  next five: reached ones carry a green tick, the next one is outlined green. Only the real count is ever shown.
+- **FAQ**: two ruled columns of `details`, green `+` that turns to `×`.
+- **Section menu** `.menu-b` + `.menu` (below 1280px): the 44px button in the pill opens a panel upward,
+  above the bar, with large links and the start button; the page dims behind it.
+- **Dialogs**: Risk Disclosure slides in from the right (up from the bottom on phones); sign-in and
+  payment are centred cards. All `--card` with a 1px rule.
+- **Subscriber dashboard**: same tokens and type. Left sidebar from 960px, bottom tab bar below.
+  Balance in large mono, chart line in green, stats as one ruled grid, segment switch with the
+  selected option in green.
 
-## 6. Motion: the Liquid Pill engine
+## 6. Motion
 
-All liquid and bubble motion comes from **one engine**: `liquid(element, options)`. Never add a
-second bubble or particle system; extend the engine instead, so everything moves the same way.
-
-- **Liquid**: fills left to right with three wave layers (colour back wave, white sheen, main body).
-  Optional foam at the front edge.
-- **Bubbles**: a depth value `d = random^1.4` decides everything: most bubbles are far away (small,
-  slow, faint); a few are close (big, fast, sharp).
-  - Coin bubble diameter: `11 + d^1.8 × 27` px, times the container scale.
-  - Plain bubble diameter: `2 + d^2.2 × 9` px (empty cards: `2 + d^1.5 × 15`).
-  - Coin bubbles are glass: bright spot top-left, clear middle, light rim, coin logo inside at 62%
-    that gently wobbles. They rise with a sway, grow slightly and **pop at a random height** with a
-    ring, the coin popping out and small droplets.
-  - **Density comes in waves**: every 1.4–6 s the rate switches between almost still, normal and busy.
-- **Rest states**:
-  - Start buttons ("Hold to start autopilot") rest at about 16% fill with foam, plain bubbles and
-    coin bubbles. They never drain to empty in view.
-  - Selected plan card: gold fill, **coin bubbles only**.
-  - Unselected plan cards: no liquid, **clear glass bubbles only** (grey rim, white glint).
-  - Background fields (hero, final band): no liquid, coin and plain bubbles, lowered opacity.
-- **Hold to confirm** `holdable()`: anything that starts, stops or pauses trading needs a 1.2 s hold.
-  The liquid follows the hold; releasing early drains it; completing it bursts bubbles.
-- Liquid labels switch to white (or `--ink` on gold) once the fill passes about 55%.
-- **Reduced motion**: with `prefers-reduced-motion` on, the engine stops spawning and nothing loops.
-- **No jumps**: don't rebuild animated elements on updates; change text in place.
+- **The liquid engine stays** (`liquid(el, options)`): it is the only bubble and liquid system.
+  Use it where it means something: button hover fills, plan selection, hold-to-start, the margin
+  tank, the subscriber pool. Never add a second particle system, and no coin or bubble backgrounds.
+- **Market glow** `.glow` (hero, closing band): the background is still light, not particles. Green
+  (`--up`) glows top left, red (`--down`) bottom right, a faint green top right, all under a fine
+  frosted grain (an inline SVG noise at 9%, overlay). In the hero it fades out over the lower third.
+- Engine rules carried over: depth-scaled bubbles, coin bubbles pop with a ring, density comes in
+  waves, labels switch to white (white on red, `--ink` on green) past about 55% fill, start buttons rest at
+  about 16% fill, no rebuilding animated elements on updates.
+- **Hold to confirm** `holdable()`: anything that starts, stops or pauses trading needs a 1.2s hold;
+  pointer and keyboard pass the same sign-in, payment and Risk Disclosure checks.
+- Interface motion tokens: `--ease-out` `cubic-bezier(.23,1,.32,1)`, `--ease-drawer`
+  `cubic-bezier(.32,.72,0,1)`, `--t-press` 160ms, `--t-ui` 200ms, `--t-panel` 350ms.
+- **Fluid scrolling.** A mouse wheel's notches are eased into one glide (`step()` in the fluid-scrolling script,
+  13% of the remaining distance per frame); trackpads and touch keep their native momentum, and anything that
+  scrolls on its own (dialogs, menu, reading sheet, phone row) is left alone. The hero arrives once on
+  load (`rise`, staggered 0–320ms on `--spring`). Section content (`.blk .wrap > *`, `.fin`) rises 40px and fades in
+  over its first 240px into view (`reveal`, a CSS scroll-driven animation on `view()`), so it tracks the scroll,
+  reverses when you scroll back and is never hidden at rest; browsers without scroll-driven animations show it
+  still. Reduced motion turns all three off.
+- Press feedback: buttons, chips, plan cards and steps scale to .97 while pressed (hold button .985).
+  Hover effects only with a real pointer (`@media (hover:hover) and (pointer:fine)`).
+- No scroll-triggered fade-ins, no parallax.
+- **Reduced motion**: the engine stops spawning; tapes, tickers and pulses stop; panels, dialogs and
+  steps fade instead of sliding.
 
 ## 7. Writing
 
 - English only. Plain, short sentences. Name things the way users know them.
 - Buttons say exactly what happens ("Continue", "Hold to start autopilot").
-- Only describe features the service really offers. Not offered today: Telegram alerts, manual
-  trading.
-- No invented testimonials, user counts, returns or performance figures. Illustrations must look
-  like illustrations.
+- Only describe features the service really offers. Not offered today: Telegram alerts, manual trading.
+- No invented testimonials, user counts, returns or performance figures. Illustrations are labelled
+  as illustrations.
 - Competitor facts need the company's own page as the source and a "checked on" date.
 - Risk wording stays visible and is never softened.
 
@@ -174,7 +287,8 @@ second bubble or particle system; extend the engine instead, so everything moves
 
 ## 10. Accessibility
 
-- Visible focus ring (`:focus-visible`, gold outline) on everything interactive.
+- Visible focus ring (`:focus-visible`, 2px green outline) on everything interactive; a skip link first.
 - Every control has a label; icon-only buttons get `aria-label`.
-- Dialogs: `role="dialog"`, `aria-modal`, Escape closes, focus returns to where it came from.
+- Dialogs: `role="dialog"`, `aria-modal`, Tab stays inside, Escape closes, focus returns to where it came from.
 - Hold-to-confirm also works from the keyboard (Space or Enter held down).
+- Focus follows the setup steps and dashboard tabs when the control that had it disappears.

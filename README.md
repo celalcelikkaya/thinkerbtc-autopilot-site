@@ -32,16 +32,22 @@ then open http://localhost:8000.
 
 4. Commit both `src/index.src.html` and the rebuilt `index.html`.
 
-Placeholders in the source: `{{LOGO}}`, `{{COIN:BTC}}` (any coin file name) and `{{COINS}}`.
+Placeholders in the source: `{{LOGO}}`, `{{COIN:BTC}}` (any coin file name), `{{COINS}}`, `{{IMG:path}}`
+(any image under `assets/`, for example `{{IMG:phones/plans.webp}}`) and `{{FONT:path}}` (a font under `assets/`,
+for example `{{FONT:fonts/Anton-Regular.woff2}}`).
 
 ## Page map
 
 | Section | Selector | Notes |
 |---|---|---|
-| Top bar | `.bar` | Menu and gold start button. Becomes "My dashboard" once a user has launched. |
-| Hero | `.hero` | Coin bubbles, a phone showing the bot's Long/Short reading, and a trade story. |
-| What the bot does | `#bot` | Animated trade chart (illustrative values) and four steps. |
-| Set up in four steps | `#setup` | Plan, Connect (keys can be skipped), Margin, Launch (Risk Disclosure must be accepted). |
+| Coin ticker | `body > .tape` | Live-looking coin prices, pinned to the top of the screen. |
+| Menu bar | `.bar` | Floating at the bottom centre: logo, section links (or a menu button), and the start button, which becomes "My dashboard" once a user has launched. |
+| Gate | `#gate` | The site opens on the android alone: accept the risk note to enter. The menu bar then opens out of the button and the page scrolls. Remembered for the session. |
+| Face | `#face` | The opening screen: an ASCII android with glowing eyes that turns to follow the pointer, with "AUTOPILOT" behind him, and a Scroll cue to the hero. |
+| Hero | `.hero` (`#intro`) | Headline, start button, and the trade chart: one illustrated trade with its entry, SL, TP and profit lock, and the four steps beneath. |
+| What the bot does | `#bot` | The bot's market reading (Long/Short liquid pills), the trade log, and four key facts. |
+| On your phone | `#phone` | Four phone screens (plan, trade chart, Solana Pay, dashboard) from `assets/phones/`; a swipeable row on phones. |
+| Set up in four steps | `#setup` | A checkout: the current step (Plan, Connect with keys that can be skipped, Margin, Launch with the Risk Disclosure) beside a live "Your autopilot" receipt that holds the start button. |
 | Compare | `#compare` | Competitor facts with sources and the date they were checked. |
 | Subscribers | `#members` | Live subscriber count in a liquid pool; syncs from `GET /api/public/stats` → `{"subscribers": n}` every 15 s. |
 | Questions | `#faq` | |
