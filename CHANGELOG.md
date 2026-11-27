@@ -92,7 +92,7 @@ Format:
 - Files: src/index.src.html, index.html, build.py, assets/phones/*.webp, assets/fonts/Anton-Regular.woff2,
   assets/fonts/Anton-OFL.txt, assets/illustrations/*.svg, mockups/*.png, DESIGN.md, AGENTS.md,
   CONTRIBUTING.md, README.md, CHANGELOG.md
-- Pull request: to be opened
+- Pull request: #3
 
 ## 2026-11-20 — Responsive polish: one design from phone to desktop
 - Version: v2.0.0 (ships in the same pull request as the redesign)
@@ -113,7 +113,7 @@ Format:
   is neutral instead of green, and "up to 1 trades" reads "up to 1 trade". `index.html` is rebuilt from the current source, which also
   brings the Subscribers section and its menu link into the built page (the committed build predated them).
 - Files: src/index.src.html, index.html, DESIGN.md, CHANGELOG.md
-- Pull request: to be opened
+- Pull request: #3
 
 ## 2026-11-20 — Binance settings in the Connect step
 - Version: v1.1.0
