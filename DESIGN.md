@@ -267,7 +267,25 @@ dashboard's numbers) stays solid so it reads first. Never put glass on glass.
   payment link".
 - Launching the bot requires sign-in (Google or Apple) and a paid plan.
 
-## 9. Accessibility
+### Binance account requirements (shown in the Connect step)
+
+- API key: reading and futures on, withdrawals off, ideally restricted to the service IP.
+- **Position mode: One-way (required).** The bot sends orders without a position side; in Hedge
+  mode Binance rejects them.
+- **USDT in the USDⓈ-M Futures wallet (required).** The bot trades from the USDT balance.
+- Asset mode: Single-Asset (recommended). Multi-Assets mode only allows cross margin.
+- Margin type and leverage: no user action; the bot sets them per pair.
+- Keep the Connect step, the FAQ and this list in sync with the bot's real requirements.
+
+## 9. Live numbers
+
+- The subscriber pool reads the real count from `GET /api/public/stats` (`{"subscribers": n}`),
+  every 15 s and when the tab gets focus. A rise pours more liquid, bursts coins and rolls the
+  number (odometer). The fill shows progress to the next milestone (100, 250, 500, 1,000 …).
+- Until the endpoint answers, it shows the empty state ("Be one of the first") at the resting level.
+- **Never hard-code or invent a count.**
+
+## 10. Accessibility
 
 - Visible focus ring (`:focus-visible`, 2px green outline) on everything interactive; a skip link first.
 - Every control has a label; icon-only buttons get `aria-label`.

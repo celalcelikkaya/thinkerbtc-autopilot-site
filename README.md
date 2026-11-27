@@ -49,6 +49,7 @@ for example `{{FONT:fonts/Anton-Regular.woff2}}`).
 | On your phone | `#phone` | Four phone screens (plan, trade chart, Solana Pay, dashboard) from `assets/phones/`; a swipeable row on phones. |
 | Set up in four steps | `#setup` | A checkout: the current step (Plan, Connect with keys that can be skipped, Margin, Launch with the Risk Disclosure) beside a live "Your autopilot" receipt that holds the start button. |
 | Compare | `#compare` | Competitor facts with sources and the date they were checked. |
+| Subscribers | `#members` | Live subscriber count in a liquid pool; syncs from `GET /api/public/stats` → `{"subscribers": n}` every 15 s. |
 | Questions | `#faq` | |
 | Final band | `.final` | Hold-to-start button. |
 | Sign in | `#si` | Google or Apple only (no password). Opens after the Plan step and before launch. |

@@ -17,7 +17,7 @@ Format:
 ---
 
 ## 2026-11-20 — Redesign: "Night desk"
-- Version: v2.0.0 (see VERSIONING.md; release v1.1.0 first so the previous look stays one click away)
+- Version: v2.0.0 (see VERSIONING.md; v1.1.0 keeps the previous look one click away)
 - Contributor: Claude Code (Claude Opus 5.5) for @sharmanathan96-max
 - What changed: A new look with every word of content kept. The first screen is now the headline and one
   instrument, the trade chart with its entry, SL, TP and profit lock, with the four steps beneath it as a
@@ -86,13 +86,16 @@ Format:
   scaled to fit and held on the exact centre of the screen (it no longer drifts with the pointer); Latin words stay in
   Anton, other scripts use the nearest heavy system face, and marks above and below the line are no longer cut off.
   It stays on "Autopilot" with reduced motion. The Anton subset gains the Turkish İ, Ş and Ğ.
+  Brought up to date with v1.1.0: the Binance Futures settings in the Connect step (One-way position mode and
+  USDT in the Futures wallet required, Single-Asset recommended, margin and leverage set by the bot) and their FAQ
+  answer are kept in the new look; the redesign's buttons and plan list replace v1.1.0's gold button foam.
 - Files: src/index.src.html, index.html, build.py, assets/phones/*.webp, assets/fonts/Anton-Regular.woff2,
   assets/fonts/Anton-OFL.txt, assets/illustrations/*.svg, mockups/*.png, DESIGN.md, AGENTS.md,
   CONTRIBUTING.md, README.md, CHANGELOG.md
 - Pull request: to be opened
 
 ## 2026-11-20 — Responsive polish: one design from phone to desktop
-- Version: v1.1.0 (see VERSIONING.md)
+- Version: v2.0.0 (ships in the same pull request as the redesign)
 - Contributor: Claude Code (Claude Opus 5.5) for @sharmanathan96-max
 - What changed: Below 1080px the section links move into a menu button with a panel, so tablets no longer squeeze
   the bar and phones can reach every section. Caption grey, small gold text and small green/red figures now pass
@@ -111,6 +114,17 @@ Format:
   brings the Subscribers section and its menu link into the built page (the committed build predated them).
 - Files: src/index.src.html, index.html, DESIGN.md, CHANGELOG.md
 - Pull request: to be opened
+
+## 2026-11-20 — Binance settings in the Connect step
+- Version: v1.1.0
+- Contributor: Claude Code (Claude Opus 5.5) for @celalcelikkaya
+- What changed: The Connect step now asks users to set position mode to One-way and keep USDT in the
+  USDⓈ-M Futures wallet (both required), recommends Single-Asset mode, and explains that margin type
+  and leverage are set by the bot. Added a matching FAQ answer. Gold buttons (Start autopilot,
+  Continue and others) now rest with the same foam, plain bubbles and coin bubbles as the other buttons,
+  and fill more slowly on hover (1.4 s); plan cards fill in 0.9 s.
+- Files: src/index.src.html, index.html, DESIGN.md, CHANGELOG.md
+- Pull request: see the v1.1.0 release
 
 ## 2026-11-20 — Initial import
 - Version: v1.0.0 (the original)
